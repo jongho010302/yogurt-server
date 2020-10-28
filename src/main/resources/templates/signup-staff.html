@@ -1,0 +1,17 @@
+<th:block th:fragment="subject">
+  요거트스튜디오 - 회원가입
+</th:block>
+
+<th:block th:fragment="content">
+  <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+    </head>
+
+    <body>
+      <p th:text="|안녕하세요, ${name}님?|"></p>
+      <p>회원가입 되셨습니다.</p>
+      <p>아래는 임시 비밀번호입니다.</p>
+      <p th:text="${password}"></p>
+    </body>
+  </html>
+</th:block>

@@ -1,0 +1,15 @@
+<th:block th:fragment="subject">
+  요거트스튜디오 - 회원가입 인증번호
+</th:block>
+
+<th:block th:fragment="content">
+  <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+    </head>
+
+    <body>
+      <p>이메일 인증번호를 확인해 주세요.</p>
+      <p th:text="${verificationCode}"></p>
+    </body>
+  </html>
+</th:block>

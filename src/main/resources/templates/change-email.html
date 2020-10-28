@@ -1,0 +1,17 @@
+<th:block th:fragment="subject">
+  요거트스튜디오 - 이메일 변
+</th:block>
+
+<th:block th:fragment="content">
+  <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+    </head>
+
+    <body>
+      <p th:text="|안녕하세요, ${name}님?|"></p>
+      <p>이메일이 변경되었습니다.</p>
+      <p th:text="|기존 이메일: ${originalEmail}|"></p>
+      <p th:text="|변경된 이메일: ${changedEmail}|"></p>
+    </body>
+  </html>
+</th:block>
