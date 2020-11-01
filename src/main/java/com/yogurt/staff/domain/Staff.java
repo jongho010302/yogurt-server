@@ -38,5 +38,4 @@ public class Staff extends BaseEntity {
     public String getHiredAt() {
         return hiredAt.getDate();
     }
-
 }

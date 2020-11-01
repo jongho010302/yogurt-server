@@ -3,7 +3,6 @@ package com.yogurt.ticket.controller.admin;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.base.dto.Meta;
 import com.yogurt.ticket.domain.Ticket;
-import com.yogurt.ticket.dto.DeleteTicketRequest;
 import com.yogurt.ticket.dto.SaveTicketRequest;
 import com.yogurt.ticket.service.TicketService;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +41,9 @@ public class AdminTicketController {
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("수강권이 저장되었습니다.", ticket), HttpStatus.OK);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<ApiResponse> deactivate(@RequestBody @Valid DeleteTicketRequest deleteTicketRequest) {
-        service.deactivateById(deleteTicketRequest.getTicketId());
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse> deactivate(@PathVariable Long id) {
+        service.deactivateById(id);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("수강권이 삭제되었습니다."), HttpStatus.OK);
     }
 }

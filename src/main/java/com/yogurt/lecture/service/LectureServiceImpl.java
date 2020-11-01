@@ -1,16 +1,20 @@
 package com.yogurt.lecture.service;
 
 import com.yogurt.base.exception.YogurtAlreadyBookedException;
-import com.yogurt.base.exception.YogurtBookingCancelTimeExceedException;
 import com.yogurt.base.exception.YogurtBookingEntryExceedException;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.base.util.DateUtils;
-import com.yogurt.lecture.domain.*;
+import com.yogurt.lecture.domain.Lecture;
+import com.yogurt.lecture.domain.LectureBooking;
+import com.yogurt.lecture.domain.LectureItem;
 import com.yogurt.lecture.dto.SaveLecturesRequest;
+import com.yogurt.lecture.infra.LectureBookingRepository;
+import com.yogurt.lecture.infra.LectureItemRepository;
+import com.yogurt.lecture.infra.LectureRepository;
 import com.yogurt.staff.domain.Staff;
 import com.yogurt.staff.service.StaffService;
-import com.yogurt.ticket.domain.MemberTicket;
-import com.yogurt.ticket.service.MemberTicketService;
+import com.yogurt.ticket.domain.UserTicket;
+import com.yogurt.ticket.service.UserTicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,7 @@ public class LectureServiceImpl implements LectureService {
 
     private final StaffService staffService;
 
-    private final MemberTicketService memberTicketService;
+    private final UserTicketService userTicketService;
 
     private final LectureRepository lectureRepository;
 
@@ -41,10 +45,10 @@ public class LectureServiceImpl implements LectureService {
 
     @Transactional
     public List<LectureBooking> getLectureBookingList(Long userId, Long memberTicketId) {
-        MemberTicket memberTicket = memberTicketService.getById(memberTicketId);
-        memberTicket.validateUserOwner(userId);
+        UserTicket userTicket = userTicketService.getById(memberTicketId);
+        userTicket.validateUserOwner(userId);
 
-        return lectureBookingRepository.findByMemberTicket(memberTicket);
+        return lectureBookingRepository.findByUserTicket(userTicket);
     }
 
     @Transactional
@@ -189,20 +193,20 @@ public class LectureServiceImpl implements LectureService {
 
     @Transactional
     public LectureBooking book(Long userId, Long lectureItemId, Long memberTicketId) {
-        MemberTicket memberTicket = memberTicketService.getById(memberTicketId);
-        memberTicket.validateUserOwner(userId);
-        memberTicket.validateRemainingCoupon();
+        UserTicket userTicket = userTicketService.getById(memberTicketId);
+        userTicket.validateUserOwner(userId);
+        userTicket.validateRemainingCoupon();
 
         LectureItem lectureItem = this.getLectureItemById(lectureItemId);
         lectureItem.validateExceedLectureBookingTime();
 
         this.validateBooking(userId, lectureItem);
 
-        memberTicket.booked();
-        MemberTicket savedMemberTicket = memberTicketService.save(memberTicket);
+        userTicket.booked();
+        UserTicket savedUserTicket = userTicketService.save(userTicket);
 
         LectureBooking lectureBooking = LectureBooking.builder()
-                .memberTicket(savedMemberTicket)
+                .userTicket(savedUserTicket)
                 .lectureItem(lectureItem)
                 .isCanceled(false)
                 .isAttended(false)
@@ -216,7 +220,7 @@ public class LectureServiceImpl implements LectureService {
 
     private void validateBooking(Long userId, LectureItem lectureItem) {
         List<LectureBooking> lectureBookingList = lectureBookingRepository.findByLectureItem(lectureItem);
-        this.validateMemberAlreadyBooked(userId, lectureBookingList);
+        this.validateUserAlreadyBooked(userId, lectureBookingList);
         this.validateBookingEntry(lectureItem, lectureBookingList);
     }
 
@@ -232,11 +236,11 @@ public class LectureServiceImpl implements LectureService {
         }
     }
 
-    private void validateMemberAlreadyBooked(Long userId, List<LectureBooking> lectureBookingList) {
+    private void validateUserAlreadyBooked(Long userId, List<LectureBooking> lectureBookingList) {
         for (LectureBooking lectureBooking : lectureBookingList) {
             if (!lectureBooking.getIsCanceled()) {
-                boolean isMemberBooked = lectureBooking.getMemberTicket().getMember().getUser().getId().equals(userId);
-                if (isMemberBooked) {
+                boolean isUserBooked = lectureBooking.getUserTicket().getUser().getId().equals(userId);
+                if (isUserBooked) {
                     throw new YogurtAlreadyBookedException("회원님은 이미 해당 강좌에 예약을 하셨습니다.");
                 }
             }
@@ -246,16 +250,16 @@ public class LectureServiceImpl implements LectureService {
     @Transactional
     public LectureBooking cancel(Long userId, Long lectureBookingId) {
         LectureBooking lectureBooking = this.getLectureBookingById(lectureBookingId);
-        MemberTicket memberTicket = lectureBooking.getMemberTicket();
+        UserTicket userTicket = lectureBooking.getUserTicket();
 
-        memberTicket.validateUserOwner(userId);
-        memberTicket.validateRemainingCancel();
+        userTicket.validateUserOwner(userId);
+        userTicket.validateRemainingCancel();
 
         LectureItem lectureItem = lectureBooking.getLectureItem();
         lectureItem.validateExceedLectureCancelTime();
 
-        memberTicket.canceled();
-        memberTicketService.save(memberTicket);
+        userTicket.canceled();
+        userTicketService.save(userTicket);
 
         lectureBooking.canceled();
         return lectureBookingRepository.save(lectureBooking);

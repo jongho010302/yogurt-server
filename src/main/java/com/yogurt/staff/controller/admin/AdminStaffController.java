@@ -3,8 +3,6 @@ package com.yogurt.staff.controller.admin;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.base.dto.Meta;
 import com.yogurt.staff.domain.Staff;
-import com.yogurt.staff.dto.DeleteStaffRequest;
-import com.yogurt.staff.dto.ResetStaffPasswordRequest;
 import com.yogurt.staff.dto.SaveStaffRequest;
 import com.yogurt.staff.service.StaffService;
 import lombok.RequiredArgsConstructor;
@@ -46,15 +44,15 @@ public class AdminStaffController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<ApiResponse> delete(@RequestBody @Valid DeleteStaffRequest staffSDeleteRequest) {
-        service.deactivate(staffSDeleteRequest.getStaffId());
+    public ResponseEntity<ApiResponse> delete(@RequestParam Long id) {
+        service.deactivate(id);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프가 삭제되었습니다."), HttpStatus.OK);
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<ApiResponse> resetStaffPassword(@RequestBody @Valid ResetStaffPasswordRequest resetStaffPasswordRequest) {
-        service.resetPassword(resetStaffPasswordRequest.getUserId());
+    public ResponseEntity<ApiResponse> resetStaffPassword(@PathVariable Long id) {
+        service.resetPassword(id);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("비밀번호가 초기화되어 해당 스태프의 이메일로 임시 비밀번호가 전송되었습니다."), HttpStatus.OK);
     }

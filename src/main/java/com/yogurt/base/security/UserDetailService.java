@@ -2,7 +2,7 @@ package com.yogurt.base.security;
 
 import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.user.domain.User;
-import com.yogurt.user.domain.UserRepository;
+import com.yogurt.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

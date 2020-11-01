@@ -42,7 +42,7 @@ public class CustomGlobalExceptionHandler {
             YogurtInvalidParamException.class,
             YogurtLackOfCouponCountException.class,
             YogurtVerifyTimeoutException.class,
-            YogurtStudioException.class,
+            YogurtStudioDifferentException.class,
             YogurtWrongPasswordException.class,
     })
     public ResponseEntity<ExceptionResponse> customHandleBadRequestException(YogurtException e) {

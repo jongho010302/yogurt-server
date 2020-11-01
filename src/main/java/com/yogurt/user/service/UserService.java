@@ -14,6 +14,8 @@ public interface UserService {
 
     User checkUser(User user);
 
+    User save(User user);
+
     void logout(HttpServletRequest request);
 
     User changeName(Long id, String name);

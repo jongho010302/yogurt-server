@@ -3,18 +3,16 @@ package com.yogurt.auth.service;
 import com.yogurt.auth.dto.FindPasswordRequest;
 import com.yogurt.auth.dto.LoginRequest;
 import com.yogurt.auth.dto.LoginResponse;
-import com.yogurt.auth.dto.SaveMemberRequest;
-import com.yogurt.member.domain.Member;
-import com.yogurt.studio.domain.Studio;
+import com.yogurt.auth.dto.SaveUserRequest;
+import com.yogurt.user.domain.User;
 
 import java.util.List;
 
 public interface AuthService {
-    List<Studio> getStudioList();
 
     LoginResponse login(LoginRequest loginRequest);
 
-    Member saveMember(SaveMemberRequest saveMemberRequest);
+    User saveUser(SaveUserRequest saveUserRequest);
 
     void validateUsername(String username);
 

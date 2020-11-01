@@ -12,8 +12,8 @@ import com.yogurt.generic.user.domain.Phone;
 import com.yogurt.generic.user.domain.VerificationType;
 import com.yogurt.mail.service.MailService;
 import com.yogurt.user.domain.User;
-import com.yogurt.user.domain.UserRepository;
 import com.yogurt.user.dto.common.ChangeEmailRequest;
+import com.yogurt.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User checkUser(User user) {
         return this.getById(user.getId());
+    }
+
+    @Transactional
+    public User save(User user) {
+        return repository.save(user);
     }
 
     public void logout(HttpServletRequest request) {

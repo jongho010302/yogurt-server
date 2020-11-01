@@ -1,7 +1,7 @@
 package com.yogurt.lecture.dto;
 
 import com.yogurt.validation.annotation.LectureItemValid;
-import com.yogurt.validation.annotation.MemberTicketValid;
+import com.yogurt.validation.annotation.UserTicketValid;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class LectureBookingRequest {
 
-    @MemberTicketValid
+    @UserTicketValid
     @NotNull(message = "회원 수강권은 필수값입니다.")
-    private Long memberTicketId;
+    private Long userTicketId;
 
     @LectureItemValid
     @NotNull(message = "수업은 필수값입니다.")

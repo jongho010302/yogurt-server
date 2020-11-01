@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface ArticleService {
 
-    Article getById(Long id);
+    Article getByIdAndStudioId(Long id, Long studioId);
 
-    List<Article> getArticlesWithFilter(Pageable pageable);
+    List<Article> getByFilter(Pageable pageable, Long studioId);
 
-    Article save(User user, SaveArticleRequest saveArticleRequest);
+    Article save(SaveArticleRequest saveArticleRequest, User user);
 
     boolean existsById(Long id);
 
-    void deleteById(Long id);
+    void deleteByIdAndStudioId(Long id, Long studioId);
 }

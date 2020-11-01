@@ -1,10 +1,12 @@
 package com.yogurt.article.domain;
 
 import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.user.domain.User;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Getter
 @Setter
@@ -17,17 +19,14 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private Long studioId;
 
-    @Column(nullable = false)
-    private Long staffId;
+    @ManyToOne
+    private User user;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-
-    @Column(nullable = false)
-    private String authorName;
 
     @Column(nullable = false)
     private int viewCount;
@@ -37,4 +36,5 @@ public class Article extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isDeleted;
+
 }

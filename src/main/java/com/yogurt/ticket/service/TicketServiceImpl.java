@@ -3,7 +3,7 @@ package com.yogurt.ticket.service;
 import com.yogurt.base.exception.YogurtAlreadyDataExistsException;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.ticket.domain.Ticket;
-import com.yogurt.ticket.domain.TicketRepository;
+import com.yogurt.ticket.infra.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

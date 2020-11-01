@@ -4,8 +4,7 @@ import com.yogurt.auth.dto.*;
 import com.yogurt.auth.service.AuthService;
 import com.yogurt.auth.service.VerificationService;
 import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.member.domain.Member;
-import com.yogurt.studio.domain.Studio;
+import com.yogurt.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +22,6 @@ public class AuthController {
     private final AuthService authService;
 
     private final VerificationService verificationService;
-
-    @GetMapping("/studios")
-    public ResponseEntity<ApiResponse> getStudioList() {
-        List<Studio> studioList = authService.getStudioList();
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("센터 리스트입니다.", studioList), HttpStatus.OK);
-    }
 
     @PostMapping("/verification/send")
     public ResponseEntity<ApiResponse> sendVerificationCode(@RequestBody @Valid SendVerificationCodeRequest sendVerificationCodeRequest) {
@@ -49,9 +42,9 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SaveMemberRequest saveMemberRequest) {
-        Member member = authService.saveMember(saveMemberRequest);
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원가입 되었습니다.", member), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SaveUserRequest saveUserRequest) {
+        User user = authService.saveUser(saveUserRequest);
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원가입 되었습니다.", user), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

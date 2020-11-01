@@ -2,7 +2,7 @@ package com.yogurt.lecture.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.ticket.domain.MemberTicket;
+import com.yogurt.ticket.domain.UserTicket;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -19,7 +19,7 @@ public class LectureBooking extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne
-    private MemberTicket memberTicket;
+    private UserTicket userTicket;
 
     @ManyToOne
     private LectureItem lectureItem;

@@ -2,7 +2,7 @@ package com.yogurt.studio.service;
 
 import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.studio.domain.Studio;
-import com.yogurt.studio.domain.StudioRepository;
+import com.yogurt.studio.infra.StudioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

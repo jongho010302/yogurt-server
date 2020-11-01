@@ -2,7 +2,7 @@ package com.yogurt.mail.service;
 
 import com.yogurt.file.FileService;
 import com.yogurt.mail.domain.Mail;
-import com.yogurt.mail.domain.MailRepository;
+import com.yogurt.mail.infra.MailRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

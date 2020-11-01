@@ -3,7 +3,7 @@ package com.yogurt.auth.service;
 import com.yogurt.auth.dto.FindPasswordRequest;
 import com.yogurt.auth.dto.LoginRequest;
 import com.yogurt.auth.dto.LoginResponse;
-import com.yogurt.auth.dto.SaveMemberRequest;
+import com.yogurt.auth.dto.SaveUserRequest;
 import com.yogurt.base.crypto.CryptoService;
 import com.yogurt.base.exception.YogurtAlreadyDataUseException;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
@@ -13,10 +13,6 @@ import com.yogurt.base.security.JwtTokenProvider;
 import com.yogurt.base.util.StringUtils;
 import com.yogurt.generic.user.domain.VerificationType;
 import com.yogurt.mail.service.MailService;
-import com.yogurt.member.domain.Member;
-import com.yogurt.member.service.MemberService;
-import com.yogurt.studio.domain.Studio;
-import com.yogurt.studio.service.StudioService;
 import com.yogurt.user.domain.User;
 import com.yogurt.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,22 +30,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
 
-    private final MemberService memberService;
-
     private final MailService mailService;
 
     private final VerificationService verificationService;
 
-    private final StudioService studioService;
-
     private final CryptoService cryptoService;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Transactional
-    public List<Studio> getStudioList() {
-        return studioService.getAll();
-    }
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
@@ -69,28 +56,28 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public Member saveMember(SaveMemberRequest saveMemberRequest) {
-        boolean existsUsername = userService.existsByUsername(saveMemberRequest.getUsername());
+    public User saveUser(SaveUserRequest saveUserRequest) {
+        boolean existsUsername = userService.existsByUsername(saveUserRequest.getUsername());
         if (existsUsername) {
             throw new YogurtAlreadyDataUseException("이미 사용중인 아이디입니다.");
         }
 
-        boolean existsEmail = userService.existsByEmail(saveMemberRequest.getEmail());
+        boolean existsEmail = userService.existsByEmail(saveUserRequest.getEmail());
         if (existsEmail) {
             throw new YogurtAlreadyDataUseException("이미 사용중인 이메일입니다.");
         }
 
-        verificationService.verifyEmail(saveMemberRequest.getEmail(), saveMemberRequest.getVerificationCode(), VerificationType.VERIFICATION_TYPE.SIGNUP.name());
+        verificationService.verifyEmail(saveUserRequest.getEmail(), saveUserRequest.getVerificationCode(), VerificationType.VERIFICATION_TYPE.SIGNUP.name());
 
-        String encryptedPassword = cryptoService.encode(saveMemberRequest.getPassword());
-        Member member = saveMemberRequest.toEntity(encryptedPassword);
+        String encryptedPassword = cryptoService.encode(saveUserRequest.getPassword());
+        User user = saveUserRequest.toEntity(encryptedPassword);
 
-        saveMemberSendMail(member.getUser());
+        this.saveUserSendMail(user);
 
-        return memberService.save(member);
+        return userService.save(user);
     }
 
-    private void saveMemberSendMail(User user) {
+    private void saveUserSendMail(User user) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("name", user.getName());
         mailService.send("/signup-user", dataMap, user.getName(), user.getEmail());
