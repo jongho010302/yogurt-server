@@ -1,0 +1,50 @@
+server:
+  port: 8080
+management:
+  health:
+    mail:
+      enabled: false
+spring:
+  jpa:
+    open-in-view: true
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      jdbc-url: SAMPLE_DATA
+      username: SAMPLE_DATA
+      password: SAMPLE_DATA
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type.descriptor.sql: trace
+cloud:
+  aws:
+    s3:
+      bucket: seoulforest-image
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: SAMPLE_DATA
+      secretKey: SAMPLE_DATA
+
+# Custom
+yogurt:
+  jwt:
+    secretKey: SAMPLE_DATA # base64 Encoded
+  file:
+    attach:
+      path: /yogurt/upload
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: SAMPLE_DATA
+    password: SAMPLE_DATA
