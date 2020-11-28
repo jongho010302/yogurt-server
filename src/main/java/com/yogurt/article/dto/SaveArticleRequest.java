@@ -21,7 +21,7 @@ public class SaveArticleRequest {
     public Article toEntity(User user) {
         return Article.builder()
                 .studioId(user.getStudioId())
-                .userId(user.getId())
+                .user(user)
                 .title(title)
                 .content(content)
                 .viewCount(0)

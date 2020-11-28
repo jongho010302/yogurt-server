@@ -16,7 +16,7 @@ public interface StaffArticleService {
 
     Article save(SaveArticleRequest saveArticleRequest, User user);
 
-    Article updateByIdAndStudioId(Long id, Long studioId, UpdateArticleRequest updateArticleRequest);
+    Article updateByIdAndUser(Long id, User user,UpdateArticleRequest updateArticleRequest);
 
     boolean existsById(Long id);
 

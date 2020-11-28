@@ -47,8 +47,7 @@ public class StaffArticleServiceImpl implements StaffArticleService {
 
     @Transactional
     public Article updateByIdAndUser(Long id, User user, UpdateArticleRequest updateArticleRequest) {
-        Article article = this.getByIdAndStudioId(id, studioId);
-        article.
+        Article article = this.getByIdAndStudioId(id, user.getStudioId());
         article.setTitle(updateArticleRequest.getTitle());
         article.setContent(updateArticleRequest.getContent());
         return repository.save(article);

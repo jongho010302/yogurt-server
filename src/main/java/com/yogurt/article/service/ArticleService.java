@@ -11,7 +11,7 @@ public interface ArticleService {
 
     Article getByIdAndStudioId(Long id, Long studioId);
 
-    List<Article> getByFilter(Pageable pageable, Long studioId);
+    List<Article> getByFilter(Pageable pageable, Long studioId, Boolean isDeleted);
 
     Article save(SaveArticleRequest saveArticleRequest, User user);
 

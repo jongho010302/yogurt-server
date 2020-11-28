@@ -21,8 +21,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final AdminArticleRepository repository;
 
     @Transactional
-    public List<Article> getByFilter(Pageable pageable, Long studioId) {
-        return repository.getByFilter(pageable, studioId);
+    public List<Article> getByFilter(Pageable pageable, Long studioId, Boolean isDeleted) {
+        return repository.getByFilter(pageable, studioId, isDeleted);
     }
 
     @Transactional
@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Transactional
     public Article save(SaveArticleRequest saveArticleRequest, User user) {
-        Article article = saveArticleRequest.toEntity(user.getStudioId(), user.getId());
+        Article article = saveArticleRequest.toEntity(user);
         return repository.save(article);
     }
 

@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,8 +21,10 @@ public class MemberArticleController {
     private final ArticleService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user, Pageable pageable) {
-        List<Article> articleList = service.getByFilter(pageable, user.getStudioId());
+    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user,
+                                              Pageable pageable,
+                                              @RequestParam(required = false) Boolean isDeleted) {
+        List<Article> articleList = service.getByFilter(pageable, user.getStudioId(), isDeleted);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글 리스트입니다.", articleList), HttpStatus.OK);
     }
 

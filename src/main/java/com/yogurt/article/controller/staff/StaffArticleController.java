@@ -48,7 +48,7 @@ public class StaffArticleController {
     public ResponseEntity<ApiResponse> update(@AuthenticationPrincipal User user,
                                               @PathVariable Long id,
                                               @RequestBody @Valid UpdateArticleRequest updateArticleRequest) {
-        Article article = service.updateByIdAndStudioId(id, user.getStudioId(), updateArticleRequest);
+        Article article = service.updateByIdAndUser(id, user, updateArticleRequest);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글입니다.", article), HttpStatus.OK);
     }
 
