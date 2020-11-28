@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.staff.service.StaffService;
+import com.yogurt.api.staff.service.StaffService;
 import com.yogurt.validation.annotation.StaffValid;
 import lombok.RequiredArgsConstructor;
 

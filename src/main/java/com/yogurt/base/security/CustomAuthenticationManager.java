@@ -1,6 +1,6 @@
 package com.yogurt.base.security;
 
-import com.yogurt.user.domain.User;
+import com.yogurt.api.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

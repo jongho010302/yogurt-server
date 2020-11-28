@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.article.service.admin.AdminArticleService;
+import com.yogurt.api.article.service.admin.AdminArticleService;
 import com.yogurt.validation.annotation.ArticleValid;
 import lombok.RequiredArgsConstructor;
 

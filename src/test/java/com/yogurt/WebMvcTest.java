@@ -1,10 +1,10 @@
 package com.yogurt;
 
-import com.yogurt.auth.controller.AuthController;
-import com.yogurt.mail.service.MailService;
+import com.yogurt.api.auth.controller.AuthController;
+import com.yogurt.api.mail.service.MailService;
 import com.yogurt.base.security.JwtTokenProvider;
-import com.yogurt.studio.service.StudioService;
-import com.yogurt.user.service.UserService;
+import com.yogurt.api.studio.service.StudioService;
+import com.yogurt.api.user.service.UserService;
 import groovy.util.logging.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

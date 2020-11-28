@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.ticket.service.TicketService;
+import com.yogurt.api.ticket.service.TicketService;
 import com.yogurt.validation.annotation.TicketValid;
 import lombok.RequiredArgsConstructor;
 

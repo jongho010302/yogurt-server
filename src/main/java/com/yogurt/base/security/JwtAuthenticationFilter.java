@@ -1,7 +1,7 @@
 package com.yogurt.base.security;
 
-import com.yogurt.auth.domain.TokenBlacklist;
-import com.yogurt.auth.domain.TokenBlacklistRepository;
+import com.yogurt.api.auth.domain.TokenBlacklist;
+import com.yogurt.api.auth.domain.TokenBlacklistRepository;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.base.util.JsonUtils;
 import lombok.RequiredArgsConstructor;

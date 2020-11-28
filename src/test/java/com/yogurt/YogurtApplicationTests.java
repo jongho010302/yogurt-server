@@ -1,6 +1,6 @@
 package com.yogurt;
 
-import com.yogurt.staff.controller.admin.AdminStaffController;
+import com.yogurt.api.staff.controller.admin.AdminStaffController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

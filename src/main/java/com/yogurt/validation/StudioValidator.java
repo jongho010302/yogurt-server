@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.studio.service.StudioService;
+import com.yogurt.api.studio.service.StudioService;
 import com.yogurt.validation.annotation.StudioValid;
 import lombok.RequiredArgsConstructor;
 

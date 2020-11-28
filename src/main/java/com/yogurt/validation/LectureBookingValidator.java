@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.lecture.service.LectureService;
+import com.yogurt.api.lecture.service.LectureService;
 import com.yogurt.validation.annotation.LectureBookingValid;
 import lombok.RequiredArgsConstructor;
 
