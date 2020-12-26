@@ -38,7 +38,6 @@ public class CustomGlobalExceptionHandler {
             YogurtInvalidFormatException.class,
             YogurtInvalidSameEmailException.class,
             YogurtInvalidSamePasswordException.class,
-            YogurtInvalidSameUsernameException.class,
             YogurtInvalidParamException.class,
             YogurtLackOfCouponCountException.class,
             YogurtVerifyTimeoutException.class,

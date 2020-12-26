@@ -24,9 +24,6 @@ public class SaveStaffRequest {
     @NotNull(message = "센터는 필수 값입니다.")
     private Long studioId;
 
-    @NotEmpty(message = "아이디는 필수 값입니다.")
-    private String username;
-
     @EmailValid
     @NotEmpty(message = "이메일은 필수 값입니다.")
     private String email;
@@ -67,7 +64,6 @@ public class SaveStaffRequest {
         User user = User.builder()
                 .studioId(studioId)
                 .email(Email.of(email))
-                .username(username)
                 .password(password)
                 .name(name)
                 .gender(Gender.of(gender))

@@ -24,9 +24,6 @@ public class User extends BaseEntity {
 
     private Email email;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JsonIgnore
     @Column(nullable = false)

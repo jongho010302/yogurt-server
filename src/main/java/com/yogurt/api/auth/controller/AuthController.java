@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -23,25 +24,43 @@ public class AuthController {
 
     private final VerificationService verificationService;
 
-    @PostMapping("/verification/send")
-    public ResponseEntity<ApiResponse> sendVerificationCode(@RequestBody @Valid SendVerificationCodeRequest sendVerificationCodeRequest) {
-        verificationService.sendVerificationCode(sendVerificationCodeRequest);
+    @PostMapping("/verification/signup/send")
+    public ResponseEntity<ApiResponse> sendSignupCode(@RequestBody @Valid SendVerificationCodeRequest sendVerificationCodeRequest) {
+        verificationService.sendSignupCode(sendVerificationCodeRequest.getEmail());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("이메일로 인증번호를 전송했습니다."), HttpStatus.OK);
     }
 
-    @PostMapping("/verification/verify")
-    public ResponseEntity<ApiResponse> verifyVerificationCode(@RequestBody @Valid VerifyVerificationCodeRequest verifyVerificationCodeRequest) {
-        verificationService.verifyEmail(verifyVerificationCodeRequest.getEmail(), verifyVerificationCodeRequest.getVerificationCode(), verifyVerificationCodeRequest.getVerificationType());
+    @PostMapping("/verification/signup/verify")
+    public ResponseEntity<ApiResponse> verifySignupCode(@RequestBody @Valid VerifyVerificationCodeRequest verifyVerificationCodeRequest) {
+        verificationService.verifySignupCode(verifyVerificationCodeRequest.getEmail(), verifyVerificationCodeRequest.getVerificationCode(), verifyVerificationCodeRequest.getVerificationType());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("인증되었습니다."), HttpStatus.OK);
     }
 
-    @PostMapping("/validate/username")
-    public ResponseEntity<ApiResponse> validateUsername(@RequestBody @Valid ValidateUsernameRequest validateUsernameRequest) {
-        authService.validateUsername(validateUsernameRequest.getUsername());
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("사용 가능한 아이디입니다."), HttpStatus.OK);
+    @PostMapping("/verification/find-password/send")
+    public ResponseEntity<ApiResponse> sendFindPasswordCode(@RequestBody @Valid SendVerificationCodeRequest sendVerificationCodeRequest) {
+        verificationService.sendFindPasswordCode(sendVerificationCodeRequest.getEmail());
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("이메일로 인증번호를 전송했습니다."), HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/verification/find-password/verify")
+    public ResponseEntity<ApiResponse> verifyFindPasswordCode(@RequestBody @Valid VerifyVerificationCodeRequest verifyVerificationCodeRequest) {
+        verificationService.verifyFindPasswordCode(verifyVerificationCodeRequest.getEmail(), verifyVerificationCodeRequest.getVerificationCode(), verifyVerificationCodeRequest.getVerificationType());
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("인증되었습니다."), HttpStatus.OK);
+    }
+
+    @PostMapping("/verification/change-email/send")
+    public ResponseEntity<ApiResponse> sendChangeEmailCode(@RequestBody @Valid SendVerificationCodeRequest sendVerificationCodeRequest) {
+        verificationService.sendChangeEmailCode(sendVerificationCodeRequest.getEmail());
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("이메일로 인증번호를 전송했습니다."), HttpStatus.OK);
+    }
+
+    @PostMapping("/verification/change-email/verify")
+    public ResponseEntity<ApiResponse> verifyChangeEmailCode(@RequestBody @Valid VerifyVerificationCodeRequest verifyVerificationCodeRequest) {
+        verificationService.verifyChangeEmailCode(verifyVerificationCodeRequest.getEmail(), verifyVerificationCodeRequest.getVerificationCode(), verifyVerificationCodeRequest.getVerificationType());
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("인증되었습니다."), HttpStatus.OK);
+    }
+
+    @PostMapping("/users")
     public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SaveUserRequest saveUserRequest) {
         User user = authService.saveUser(saveUserRequest);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원가입 되었습니다.", user), HttpStatus.CREATED);
@@ -53,16 +72,10 @@ public class AuthController {
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("로그인되었습니다.", loginResponse), HttpStatus.OK);
     }
 
-    @GetMapping("/find/masking-username")
-    public ResponseEntity<ApiResponse> findMaskingUsername(@RequestParam @NotEmpty(message = "이름은 필수 값입니다.") String name) {
-        List<String> maskingUsernameList = authService.findMaskingUsername(name);
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("아이디 찾기 결과입니다.", maskingUsernameList), HttpStatus.OK);
-    }
-
-    @PostMapping("/find/username")
-    public ResponseEntity<ApiResponse> findUsername(@RequestBody @Valid FindUsernameRequest findUsernameRequest) {
-        authService.findUsername(findUsernameRequest.getEmail());
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("해당 이메일로 아이디를 전송했습니다."), HttpStatus.OK);
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(HttpServletRequest request) {
+        authService.logout(request);
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("로그아웃되었습니다."), HttpStatus.OK);
     }
 
     @PutMapping("/find/password")

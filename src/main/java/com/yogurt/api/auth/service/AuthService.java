@@ -6,19 +6,16 @@ import com.yogurt.api.auth.dto.LoginResponse;
 import com.yogurt.api.auth.dto.SaveUserRequest;
 import com.yogurt.api.user.domain.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface AuthService {
 
     LoginResponse login(LoginRequest loginRequest);
 
+    void logout(HttpServletRequest request);
+
     User saveUser(SaveUserRequest saveUserRequest);
-
-    void validateUsername(String username);
-
-    List<String> findMaskingUsername(String username);
-
-    void findUsername(String email);
 
     void findPassword(FindPasswordRequest findPasswordRequest);
 

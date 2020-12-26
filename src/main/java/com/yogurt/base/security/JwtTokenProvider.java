@@ -49,7 +49,7 @@ public class JwtTokenProvider {
     // JWT 토큰에서 인증 정보 조회
     @Transactional
     public Authentication getAuthentication(String token) {
-        User user = userDetailService.getByUsername(getUserPk(token));
+        User user = userDetailService.getByEmail(getUserPk(token));
         Collection<? extends GrantedAuthority> collection = Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
         return new UsernamePasswordAuthenticationToken(user, "", collection);
     }

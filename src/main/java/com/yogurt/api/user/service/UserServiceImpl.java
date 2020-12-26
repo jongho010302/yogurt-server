@@ -1,25 +1,24 @@
 package com.yogurt.api.user.service;
 
-import com.yogurt.api.auth.domain.TokenBlacklist;
-import com.yogurt.api.auth.domain.TokenBlacklistRepository;
 import com.yogurt.api.auth.service.VerificationService;
-import com.yogurt.base.crypto.CryptoService;
-import com.yogurt.base.exception.*;
-import com.yogurt.base.security.JwtTokenProvider;
-import com.yogurt.file.S3Uploader;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Phone;
-import com.yogurt.generic.user.domain.VerificationType;
 import com.yogurt.api.mail.service.MailService;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.dto.common.ChangeEmailRequest;
 import com.yogurt.api.user.infra.UserRepository;
+import com.yogurt.base.crypto.CryptoService;
+import com.yogurt.base.exception.YogurtDataNotExistsException;
+import com.yogurt.base.exception.YogurtEntityNotFountException;
+import com.yogurt.base.exception.YogurtInvalidSameEmailException;
+import com.yogurt.base.exception.YogurtInvalidSamePasswordException;
+import com.yogurt.file.S3Uploader;
+import com.yogurt.generic.user.domain.Email;
+import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.generic.user.domain.VerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +34,9 @@ public class UserServiceImpl implements UserService {
 
     private final VerificationService verificationService;
 
-    private final JwtTokenProvider jwtTokenProvider;
-
     private final S3Uploader s3Uploader;
 
     private final UserRepository repository;
-
-    private final TokenBlacklistRepository tokenBlacklistRepository;
 
     @Transactional
     public User getById(Long id) {
@@ -58,11 +53,6 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-    public void logout(HttpServletRequest request) {
-        String token = jwtTokenProvider.resolveToken(request);
-        tokenBlacklistRepository.save(TokenBlacklist.of(token));
-    }
-
     @Transactional
     public User changeName(Long id, String name) {
         User user = this.getById(id);
@@ -75,28 +65,6 @@ public class UserServiceImpl implements UserService {
         User user = this.getById(id);
         user.setPhone(Phone.of(phone));
         return repository.save(user);
-    }
-
-    @Transactional
-    public User changeUsername(Long id, String username) {
-        User user = this.getById(id);
-        if (user.getUsername().equals(username)) {
-            throw new YogurtInvalidSameUsernameException("이전 아이디와 같은 아이디로 변경할 수 없습니다.");
-        }
-        if (existsByUsername(username)) {
-            throw new YogurtAlreadyDataUseException("이미 사용중인 아이디입니다.");
-        }
-        user.setUsername(username);
-        User updatedUser = repository.save(user);
-        changeUsernameSendMail(updatedUser);
-        return updatedUser;
-    }
-
-    private void changeUsernameSendMail(User user) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", user.getName());
-        dataMap.put("username", user.getUsername());
-        mailService.send("/change-username", dataMap, user.getName(), user.getEmail());
     }
 
     @Transactional
@@ -161,22 +129,9 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-    public User getByUsername(String username) {
-        User user = repository.findByUsername(username).orElseThrow(() -> new YogurtEntityNotFountException("등록되지 않은 아이디입니다."));
-        return user;
-    }
-
     public User getByEmail(String email) {
         User user = repository.findByEmail(Email.of(email)).orElseThrow(() -> new YogurtEntityNotFountException("해당 이메일로 등록된 유저가 없습니다."));
         return user;
-    }
-
-    public List<User> getByName(String name) {
-        return repository.findByName(name);
-    }
-
-    public boolean existsByUsername(String username) {
-        return repository.existsByUsername(username);
     }
 
     public boolean existsByEmail(String email) {
@@ -185,12 +140,6 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllWithFilter(Pageable pageable, Boolean isExit) {
         return repository.getAllWithFilter(pageable, isExit);
-    }
-
-    public String getMaskingUsername(String username) {
-        int length = username.length();
-
-        return username.substring(0, length - 2) + "**";
     }
 
     public User exit(Long id, String exitReason) {

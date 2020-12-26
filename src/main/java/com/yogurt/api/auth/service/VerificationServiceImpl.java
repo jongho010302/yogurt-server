@@ -3,9 +3,9 @@ package com.yogurt.api.auth.service;
 import com.yogurt.api.auth.domain.Verification;
 import com.yogurt.api.auth.domain.VerificationRepository;
 import com.yogurt.api.auth.dto.SendVerificationCodeRequest;
-import com.yogurt.base.exception.YogurtDataNotExistsException;
-import com.yogurt.base.exception.YogurtDifferentVerificationCodeException;
-import com.yogurt.base.exception.YogurtVerifyTimeoutException;
+import com.yogurt.api.user.infra.UserRepository;
+import com.yogurt.api.user.service.UserService;
+import com.yogurt.base.exception.*;
 import com.yogurt.base.util.StringUtils;
 import com.yogurt.generic.user.domain.Email;
 import com.yogurt.generic.user.domain.VerificationType;
@@ -23,28 +23,85 @@ import java.util.Map;
 @Service
 public class VerificationServiceImpl implements VerificationService {
 
+    private final UserRepository userRepository;
+
     private final VerificationRepository repository;
 
     private final MailService mailService;
 
     @Transactional
-    public void sendVerificationCode(SendVerificationCodeRequest sendVerificationCodeRequest) {
-        String verificationCode = StringUtils.getUUID(5);
-        String verificationType = sendVerificationCodeRequest.getVerificationType();
-        String email = sendVerificationCodeRequest.getEmail();
+    public void sendSignupCode(String email) {
+        String verificationCode = getVerificationCode();
 
-        repository.save(Verification.of(email, verificationCode, verificationType));
+        repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));
 
         Map<String, Object> mailContext = new HashMap<>();
         mailContext.put("verificationCode", verificationCode);
 
-        if (verificationType.equals(VerificationType.VERIFICATION_TYPE.SIGNUP.name())) {
-            mailService.send("/signup-user-verify", mailContext, "Anonymous User", email);
-        } else if (verificationType.equals(VerificationType.VERIFICATION_TYPE.FIND_PASSWORD.name())) {
-            mailService.send("/find-password-verify", mailContext, "Anonymous User", email);
-        } else if (verificationType.equals(VerificationType.VERIFICATION_TYPE.CHANGE_EMAIL.name())) {
-            mailService.send("/change-email-verify", mailContext, "Anonymous User", email);
+        mailService.send("/signup-user-verify", mailContext, "Anonymous User", email);
+    }
+
+    private String getVerificationCode() {
+        String verificationCode = StringUtils.getUUID(5);
+        return verificationCode;
+    }
+
+    public boolean existsUserByEmail(String email) {
+        return userRepository.existsByEmail(Email.of(email));
+    }
+
+    @Transactional
+    public void verifySignupCode(String email, String verificationCode, String type) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (isUserExists) {
+            throw new YogurtAlreadyDataExistsException("이미 가입된 이메일입니다. 다른 이메일을 사용해주세요.");
         }
+
+        verifyEmail(email, verificationCode, type);
+    }
+
+    @Transactional
+    public void sendFindPasswordCode(String email) {
+        String verificationCode = getVerificationCode();
+
+        repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));
+
+        Map<String, Object> mailContext = new HashMap<>();
+        mailContext.put("verificationCode", verificationCode);
+
+        mailService.send("/find-password-verify", mailContext, "Anonymous User", email);
+    }
+
+    @Transactional
+    public void verifyFindPasswordCode(String email, String verificationCode, String type) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (!isUserExists) {
+            throw new YogurtAlreadyDataExistsException("가입되지 않은 이메일입니다. 다른 이메일을 사용해주세요.");
+        }
+
+        verifyEmail(email, verificationCode, type);
+    }
+
+    @Transactional
+    public void sendChangeEmailCode(String email) {
+        String verificationCode = getVerificationCode();
+
+        repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));
+
+        Map<String, Object> mailContext = new HashMap<>();
+        mailContext.put("verificationCode", verificationCode);
+
+        mailService.send("/change-email-verify", mailContext, "Anonymous User", email);
+    }
+
+    @Transactional
+    public void verifyChangeEmailCode(String email, String verificationCode, String type) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (!isUserExists) {
+            throw new YogurtAlreadyDataExistsException("가입되지 않은 이메일입니다. 다른 이메일을 사용해주세요.");
+        }
+
+        verifyEmail(email, verificationCode, type);
     }
 
     @Transactional

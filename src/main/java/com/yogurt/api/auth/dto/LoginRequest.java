@@ -9,8 +9,8 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class LoginRequest {
 
-    @NotEmpty(message = "아이디는 필수 값입니다.")
-    private String username;
+    @NotEmpty(message = "이메일은 필수 값입니다.")
+    private String email;
 
     @NotEmpty(message = "비밀번호는 필수 값입니다.")
     private String password;

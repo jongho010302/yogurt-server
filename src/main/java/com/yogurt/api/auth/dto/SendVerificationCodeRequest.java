@@ -14,8 +14,4 @@ public class SendVerificationCodeRequest {
     @EmailValid
     @NotEmpty(message = "이메일은 필수 값입니다.")
     private String email;
-
-    @VerificationValid
-    @NotEmpty(message = "인증번호 타입은 필수 값입니다.")
-    private String verificationType;
 }

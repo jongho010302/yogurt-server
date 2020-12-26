@@ -1,5 +1,7 @@
 package com.yogurt.api.auth.service;
 
+import com.yogurt.api.auth.domain.TokenBlacklist;
+import com.yogurt.api.auth.domain.TokenBlacklistRepository;
 import com.yogurt.api.auth.dto.FindPasswordRequest;
 import com.yogurt.api.auth.dto.LoginRequest;
 import com.yogurt.api.auth.dto.LoginResponse;
@@ -18,6 +20,7 @@ import com.yogurt.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +41,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final TokenBlacklistRepository tokenBlacklistRepository;
+
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userService.getByUsername(loginRequest.getUsername());
+        User user = userService.getByEmail(loginRequest.getEmail());
 
         boolean isSamePassword = cryptoService.compare(loginRequest.getPassword(), user.getPassword());
         if (!isSamePassword) {
@@ -51,17 +56,17 @@ public class AuthServiceImpl implements AuthService {
             throw new YogurtNoAuthException("탈퇴된 회원입니다.");
         }
 
-        String jwtToken = jwtTokenProvider.createToken(user.getUsername(), user.getRole());
+        String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole());
         return LoginResponse.of(jwtToken, user);
+    }
+
+    public void logout(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request);
+        tokenBlacklistRepository.save(TokenBlacklist.of(token));
     }
 
     @Transactional
     public User saveUser(SaveUserRequest saveUserRequest) {
-        boolean existsUsername = userService.existsByUsername(saveUserRequest.getUsername());
-        if (existsUsername) {
-            throw new YogurtAlreadyDataUseException("이미 사용중인 아이디입니다.");
-        }
-
         boolean existsEmail = userService.existsByEmail(saveUserRequest.getEmail());
         if (existsEmail) {
             throw new YogurtAlreadyDataUseException("이미 사용중인 이메일입니다.");
@@ -81,40 +86,6 @@ public class AuthServiceImpl implements AuthService {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("name", user.getName());
         mailService.send("/signup-user", dataMap, user.getName(), user.getEmail());
-    }
-
-    @Transactional
-    public void validateUsername(String username) {
-        if (userService.existsByUsername(username)) {
-            throw new YogurtAlreadyDataUseException("이미 사용중인 아이디입니다.");
-        }
-    }
-
-    @Transactional
-    public List<String> findMaskingUsername(String name) {
-        List<User> userList = userService.getByName(name);
-        if (userList.isEmpty()) {
-            throw new YogurtDataNotExistsException("해당 이름으로 등록된 유저가 없습니다.");
-        }
-
-        return userList
-                .stream()
-                .map((user) ->
-                        userService.getMaskingUsername(user.getUsername()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void findUsername(String email) {
-        User user = userService.getByEmail(email);
-        findUsernameSendMail(user);
-    }
-
-    private void findUsernameSendMail(User user) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", user.getName());
-        dataMap.put("username", user.getUsername());
-        mailService.send("/find-username", dataMap, user.getName(), user.getEmail());
     }
 
     @Transactional

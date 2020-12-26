@@ -27,12 +27,6 @@ public class UserController {
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("유저 체크 성공.", checkedUser), HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(HttpServletRequest request) {
-        userService.logout(request);
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("로그아웃되었습니다."), HttpStatus.OK);
-    }
-
     @PutMapping("/name")
     public ResponseEntity<ApiResponse> changeName(@AuthenticationPrincipal User user, @RequestBody @Validated ChangeNameRequest changeNameRequest) {
         User changedUser = userService.changeName(user.getId(), changeNameRequest.getName());
@@ -45,13 +39,6 @@ public class UserController {
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("전화번호가 변경되었습니다.", changedUser), HttpStatus.OK);
     }
 
-    @PutMapping("/username")
-    public ResponseEntity<ApiResponse> changeUsername(@AuthenticationPrincipal User user, @RequestBody @Validated ChangeUsernameRequest changeUsernameRequest, HttpServletRequest request) {
-        User changedUser = userService.changeUsername(user.getId(), changeUsernameRequest.getUsername());
-        userService.logout(request);
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("아이디가 변경되었습니다.", changedUser), HttpStatus.OK);
-    }
-
     @PutMapping("/profile")
     public ResponseEntity<ApiResponse> changeProfileUrl(@AuthenticationPrincipal User user, @RequestParam("profile") MultipartFile multipartFile) {
         User changedUser = userService.changeProfile(user.getId(), multipartFile);
@@ -61,14 +48,12 @@ public class UserController {
     @PutMapping("/password")
     public ResponseEntity<ApiResponse> changePassword(@AuthenticationPrincipal User user, @RequestBody @Validated ChangePasswordRequest changePasswordRequest, HttpServletRequest request) {
         User changedUser = userService.changePassword(user.getId(), changePasswordRequest.getPassword());
-        userService.logout(request);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("비밀번호가 변경되었습니다.", changedUser), HttpStatus.OK);
     }
 
     @PutMapping("/email")
     public ResponseEntity<ApiResponse> changeEmail(@AuthenticationPrincipal User user, @RequestBody @Validated ChangeEmailRequest changeEmailRequest, HttpServletRequest request) {
         userService.changeEmail(user.getId(), changeEmailRequest);
-        userService.logout(request);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("이메일이 변경되었습니다."), HttpStatus.OK);
     }
 

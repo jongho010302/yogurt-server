@@ -18,7 +18,6 @@ public enum ErrorType implements InterfaceErrorType {
     INVALID_FORMAT("invalid.class.type.format"),
     INVALID_SAME_EMAIL("invalid.same.email"),
     INVALID_SAME_PASSWORD("invalid.same.password"),
-    INVALID_SAME_USERNAME("invalid.same.username"),
     INVALID_PARAM("invalid.param"),
     INTERNAL_SERVER("internal.server"),
     LACK_OF_COUPON_COUNT("lack.of.coupon.count"),

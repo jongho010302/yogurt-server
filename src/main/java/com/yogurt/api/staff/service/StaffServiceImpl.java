@@ -51,10 +51,6 @@ public class StaffServiceImpl implements StaffService {
 
     @Transactional
     public Staff saveStaff(SaveStaffRequest saveStaffRequest) {
-        if (userService.existsByUsername(saveStaffRequest.getUsername())) {
-            throw new YogurtAlreadyDataUseException("이미 사용중인 아이디입니다.");
-        }
-
         if (userService.existsByEmail(saveStaffRequest.getEmail())) {
             throw new YogurtAlreadyDataUseException("이미 사용중인 이메일입니다.");
         }

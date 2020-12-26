@@ -22,7 +22,7 @@ public class CustomAuthenticationManager implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userDetailService.getByUsername(name);
+        User user = userDetailService.getByEmail(name);
         if (user != null){
 
             // use the credentials

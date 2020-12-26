@@ -20,9 +20,6 @@ public class SaveUserRequest {
     @NotNull(message = "센터는 필수 값입니다.")
     private Long studioId;
 
-    @NotEmpty(message = "아이디는 필수 값입니다.")
-    private String username;
-
     @PasswordValid
     @NotEmpty(message = "비밀번호는 필수 값입니다.")
     private String password;
@@ -55,7 +52,6 @@ public class SaveUserRequest {
     public User toEntity(String password) {
         return User.builder()
                 .studioId(studioId)
-                .username(username)
                 .password(password)
                 .email(Email.of(email))
                 .name(name)

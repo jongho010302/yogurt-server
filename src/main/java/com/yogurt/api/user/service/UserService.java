@@ -16,13 +16,9 @@ public interface UserService {
 
     User save(User user);
 
-    void logout(HttpServletRequest request);
-
     User changeName(Long id, String name);
 
     User changePhone(Long id, String phone);
-
-    User changeUsername(Long id, String username);
 
     User changeProfile(Long id, MultipartFile multipartFile);
 
@@ -32,21 +28,13 @@ public interface UserService {
 
     User getByEmail(String Email);
 
-    User getByUsername(String username);
-
-    List<User> getByName(String name);
-
     List<User> getAllWithFilter(Pageable pageable, Boolean isExit);
 
     boolean existsByEmail(String email);
 
-    boolean existsByUsername(String username);
-
     User exit(Long id, String exit);
 
     User changePassword(Long userId, String rawPassword);
-
-    String getMaskingUsername(String username);
 
     boolean existsById(Long id);
 }
