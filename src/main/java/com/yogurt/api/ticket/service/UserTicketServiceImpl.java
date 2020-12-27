@@ -8,10 +8,12 @@ import com.yogurt.api.ticket.dto.SaveUserTicketRequest;
 import com.yogurt.api.ticket.infra.UserTicketRepository;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.service.UserService;
+import com.yogurt.base.util.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,7 +33,8 @@ public class UserTicketServiceImpl implements UserTicketService {
 
     @Transactional
     public List<UserTicket> getAllByUser(User user) {
-        return repository.findByUser(user);
+        Date currentDate = DateUtils.getCurrentDate();
+        return repository.findByUserAndIsDeletedAndEndDateGreaterThanEqual(user, false, currentDate);
     }
 
     @Transactional
@@ -49,12 +52,12 @@ public class UserTicketServiceImpl implements UserTicketService {
     }
 
     @Transactional
-    public void deactivateById(Long id) {
+    public void delete(Long id) {
         UserTicket userTicket = this.getById(id);
-        if (userTicket.getIsDeactivated()) {
-            throw new YogurtAlreadyDataExistsException("이미 중지된 회원 수강권입니다.");
+        if (userTicket.getIsDeleted()) {
+            throw new YogurtAlreadyDataExistsException("이미 삭제된 회원 수강권입니다.");
         }
-        userTicket.setIsDeactivated(true);
+        userTicket.deleted();
         repository.save(userTicket);
     }
 

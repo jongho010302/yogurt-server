@@ -6,6 +6,7 @@ import com.yogurt.api.auth.dto.SendVerificationCodeRequest;
 import com.yogurt.api.user.infra.UserRepository;
 import com.yogurt.api.user.service.UserService;
 import com.yogurt.base.exception.*;
+import com.yogurt.base.util.DateUtils;
 import com.yogurt.base.util.StringUtils;
 import com.yogurt.generic.user.domain.Email;
 import com.yogurt.generic.user.domain.VerificationType;
@@ -126,7 +127,7 @@ public class VerificationServiceImpl implements VerificationService {
                 .orElseThrow(() -> new YogurtDataNotExistsException("인증번호가 전송된 적이 없는 이메일입니다."));
 
         Calendar currentCal = Calendar.getInstance();
-        currentCal.setTime(new Date());
+        currentCal.setTime(DateUtils.getCurrentDate());
 
         Calendar verifyLimitCal = Calendar.getInstance();
         verifyLimitCal.setTime(verification.getCreatedAt());

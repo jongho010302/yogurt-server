@@ -59,7 +59,6 @@ public class SaveUserRequest {
                 .phone(Phone.of(phone))
                 .profileUrl(profileUrl)
                 .role("ROLE_MEMBER")
-                .isDeleted(false)
                 .build();
     }
 

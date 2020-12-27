@@ -33,12 +33,12 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Transactional
-    public void deactivateById(Long id) {
+    public void delete(Long id) {
         Ticket ticket = this.getById(id);
-        if (ticket.getIsDeactivated()) {
+        if (ticket.getIsDeleted()) {
             throw new YogurtAlreadyDataExistsException("이미 사용 중지된 수강권입니다.");
         }
-        ticket.setIsDeactivated(true);
+        ticket.deleted();
         repository.save(ticket);
     }
 

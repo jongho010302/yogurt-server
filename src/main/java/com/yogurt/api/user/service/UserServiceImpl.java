@@ -10,6 +10,7 @@ import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.base.exception.YogurtEntityNotFountException;
 import com.yogurt.base.exception.YogurtInvalidSameEmailException;
 import com.yogurt.base.exception.YogurtInvalidSamePasswordException;
+import com.yogurt.base.util.DateUtils;
 import com.yogurt.file.S3Uploader;
 import com.yogurt.generic.user.domain.Email;
 import com.yogurt.generic.user.domain.Phone;
@@ -126,18 +127,15 @@ public class UserServiceImpl implements UserService {
     }
 
     public User delete(User user, String deleteReason) {
-        user.setIsDeleted(true);
-        user.setDeletedAt(new Date());
+        user.deleted();
+        user.setDeletedAt(DateUtils.getCurrentDate());
         user.setDeleteReason(deleteReason);
         return repository.save(user);
     }
 
     public User delete(Long id, String deleteReason) {
         User user = this.getById(id);
-        user.setIsDeleted(true);
-        user.setDeletedAt(new Date());
-        user.setDeleteReason(deleteReason);
-        return repository.save(user);
+        return delete(user, deleteReason);
     }
 
     public User getByEmail(String email) {

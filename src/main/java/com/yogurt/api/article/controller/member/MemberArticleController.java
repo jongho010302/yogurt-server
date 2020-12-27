@@ -4,6 +4,7 @@ import com.yogurt.api.article.domain.Article;
 import com.yogurt.api.article.service.ArticleService;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.api.user.domain.User;
+import com.yogurt.base.dto.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,10 @@ public class MemberArticleController {
     private final ArticleService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user,
-                                              Pageable pageable,
-                                              @RequestParam(required = false) Boolean isDeleted) {
-        List<Article> articleList = service.getByFilter(pageable, user.getStudioId(), isDeleted);
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글 리스트입니다.", articleList), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user, Pageable pageable) {
+        // 회원은 삭제된 게시글을 조회할 수 없다. 그래서 AdminArticleController 와 다르게 isDeleted 를 파라미터로 받지 않고 이곳에서 false 을 넣어준다.
+        List<Article> articleList = service.getByFilter(pageable, user.getStudioId(), false);
+        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글 리스트입니다.", articleList, Meta.of(pageable, articleList.size())), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

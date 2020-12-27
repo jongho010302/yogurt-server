@@ -1,13 +1,15 @@
 package com.yogurt.api.lecture.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.yogurt.generic.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.yogurt.api.ticket.domain.UserTicket;
+import com.yogurt.base.util.DateUtils;
+import com.yogurt.generic.base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,7 +19,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LectureBooking extends BaseEntity {
 
-    @JsonIgnore
+    @JsonManagedReference
     @ManyToOne
     private UserTicket userTicket;
 
@@ -25,16 +27,26 @@ public class LectureBooking extends BaseEntity {
     private LectureItem lectureItem;
 
     @Column(nullable = false)
-    private Boolean isCanceled;
-
-    @Column(nullable = false)
     private Boolean isAttended;
 
+    @Column
+    private Date attendedAt;
+
+    @Column(nullable = false)
+    private Boolean isCanceled;
+
+    @Column
+    private Date canceledAt;
+
     public void canceled() {
-        this.isCanceled = true;
+        Date currentDate = DateUtils.getCurrentDate();
+        setCanceledAt(currentDate);
+        setIsCanceled(true);
     }
 
     public void attended() {
-        this.isAttended = true;
+        Date currentDate = DateUtils.getCurrentDate();
+        setAttendedAt(currentDate);
+        setIsAttended(true);
     }
 }

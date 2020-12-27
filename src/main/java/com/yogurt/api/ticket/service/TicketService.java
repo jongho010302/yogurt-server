@@ -13,7 +13,7 @@ public interface TicketService {
 
     Ticket save(Ticket ticket);
 
-    void deactivateById(Long ticketId);
+    void delete(Long ticketId);
 
     boolean existsById(Long id);
 }

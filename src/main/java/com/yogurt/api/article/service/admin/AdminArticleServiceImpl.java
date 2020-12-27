@@ -55,7 +55,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     @Transactional
     public void deleteByIdAndStudioId(Long id, Long studioId) {
         Article article = this.getByIdAndStudioId(id, studioId);
-        article.setIsDeleted(true);
+        article.deleted();
         repository.save(article);
     }
 

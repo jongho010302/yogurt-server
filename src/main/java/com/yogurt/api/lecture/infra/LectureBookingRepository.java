@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface LectureBookingRepository extends JpaRepository<LectureBooking, Long> {
 
-    List<LectureBooking> findByUserTicket(UserTicket userTicket);
+    List<LectureBooking> findByUserTicketInAndIsCanceled(List<UserTicket> userTickets, Boolean isCancel);
 
     List<LectureBooking> findByLectureItem(LectureItem lectureItem);
 }

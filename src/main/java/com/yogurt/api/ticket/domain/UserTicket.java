@@ -3,6 +3,8 @@ package com.yogurt.api.ticket.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.yogurt.base.exception.YogurtInvalidParamException;
 import com.yogurt.base.exception.YogurtLackOfCouponCountException;
+import com.yogurt.base.exception.YogurtTicketExpiredException;
+import com.yogurt.base.util.DateUtils;
 import com.yogurt.generic.base.BaseEntity;
 import com.yogurt.api.user.domain.User;
 import lombok.*;
@@ -10,6 +12,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,6 +22,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserTicket extends BaseEntity {
 
+    @JsonBackReference
     @ManyToOne
     private Ticket ticket;
 
@@ -44,14 +48,19 @@ public class UserTicket extends BaseEntity {
 
     // 이용 시작일
     @Column(nullable = false)
-    private String startDate;
+    private Date startDate;
 
     // 이용 종료일
     @Column(nullable = false)
-    private String endDate;
+    private Date endDate;
 
-    @Column(nullable = false)
-    private Boolean isDeactivated;
+    public void validateExpirationDate() {
+        Date currentDate = DateUtils.getCurrentDate();
+        Date endDate = this.getEndDate();
+        if (currentDate.compareTo(endDate) > 0) {
+            throw new YogurtTicketExpiredException("User ticket is expired.");
+        }
+    }
 
     public void validateUserOwner(long userId) {
         if (!this.isUserOwner(userId)) {

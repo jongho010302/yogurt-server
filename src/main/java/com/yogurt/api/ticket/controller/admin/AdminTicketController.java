@@ -43,7 +43,7 @@ public class AdminTicketController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> deactivate(@PathVariable Long id) {
-        service.deactivateById(id);
+        service.delete(id);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("수강권이 삭제되었습니다."), HttpStatus.OK);
     }
 }

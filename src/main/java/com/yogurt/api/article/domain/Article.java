@@ -33,8 +33,4 @@ public class Article extends BaseEntity {
 
     @Column(nullable = false)
     private int likeCount;
-
-    @Column(nullable = false)
-    private Boolean isDeleted;
-
 }

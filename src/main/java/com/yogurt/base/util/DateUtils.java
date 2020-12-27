@@ -10,7 +10,6 @@ public class DateUtils {
 
     static final String DATE_PATTERN_DEFAULT = "yyyy-MM-dd";
 
-
     public static Date parse(String date) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_DEFAULT);
@@ -49,7 +48,7 @@ public class DateUtils {
 
     public static Calendar getCalendar() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(DateUtils.getCurrentDate());
         return calendar;
     }
 
@@ -58,5 +57,9 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar;
+    }
+
+    public static Date getCurrentDate() {
+        return new Date();
     }
 }

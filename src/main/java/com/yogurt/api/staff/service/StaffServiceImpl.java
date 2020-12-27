@@ -11,6 +11,7 @@ import com.yogurt.api.staff.dto.SaveStaffRequest;
 import com.yogurt.api.staff.infra.StaffRepository;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.service.UserService;
+import com.yogurt.base.util.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -73,8 +74,8 @@ public class StaffServiceImpl implements StaffService {
         if (staff.getIsDeleted()) {
             throw new YogurtAlreadyDataExistsException("이미 삭제된 직원입니다.");
         }
-        staff.setIsDeleted(true);
-        staff.setDeletedAt(new Date());
+        staff.deleted();
+        staff.setDeletedAt(DateUtils.getCurrentDate());
 
         userService.delete(staff.getUser(), "from admin page");
         repository.save(staff);

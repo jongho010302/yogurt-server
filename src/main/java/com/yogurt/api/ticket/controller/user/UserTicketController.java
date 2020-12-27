@@ -16,7 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users/tickets")
+@RequestMapping("/member/tickets")
 public class UserTicketController {
 
     private final UserTicketService service;

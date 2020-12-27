@@ -1,6 +1,7 @@
 package com.yogurt.base.security;
 
 import com.yogurt.api.user.domain.User;
+import com.yogurt.base.util.DateUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -36,7 +37,7 @@ public class JwtTokenProvider {
     public String createToken(String userPk, String role) {
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
         claims.put("role", role); // 정보는 key / value 쌍으로 저장된다.
-        Date now = new Date();
+        Date now = DateUtils.getCurrentDate();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
@@ -68,7 +69,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
+            return !claims.getBody().getExpiration().before(DateUtils.getCurrentDate());
         } catch (Exception e) {
             return false;
         }

@@ -23,9 +23,6 @@ public class ArticleComment extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    private Boolean isDeleted;
-
     @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private User user;

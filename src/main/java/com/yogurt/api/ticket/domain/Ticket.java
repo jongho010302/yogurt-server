@@ -73,9 +73,6 @@ public class Ticket extends BaseEntity {
     @Column(nullable = false)
     private Boolean isSelling;
 
-    @Column(nullable = false)
-    private Boolean isDeactivated;
-
     public String getClassType() {
         return classType.getClassType();
     }

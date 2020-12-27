@@ -1,6 +1,8 @@
 package com.yogurt.api.lecture.service;
 
 import com.yogurt.api.lecture.dto.LectureSchedule;
+import com.yogurt.api.ticket.infra.UserTicketRepository;
+import com.yogurt.api.user.domain.User;
 import com.yogurt.base.exception.YogurtAlreadyBookedException;
 import com.yogurt.base.exception.YogurtBookingEntryExceedException;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
@@ -43,14 +45,6 @@ public class LectureServiceImpl implements LectureService {
     @Transactional
     public List<LectureItem> getAllWithFilter(Long studioId, Pageable pageable, String startAt, String endAt, String weekDay, Long staffId, String classType) {
         return lectureItemRepository.getAllWithFilter(pageable, studioId, startAt, endAt, weekDay, staffId, classType);
-    }
-
-    @Transactional
-    public List<LectureBooking> getLectureBookingList(Long userId, Long memberTicketId) {
-        UserTicket userTicket = userTicketService.getById(memberTicketId);
-        userTicket.validateUserOwner(userId);
-
-        return lectureBookingRepository.findByUserTicket(userTicket);
     }
 
     @Transactional
@@ -141,10 +135,18 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Transactional
-    public LectureBooking book(Long userId, Long lectureItemId, Long memberTicketId) {
-        UserTicket userTicket = userTicketService.getById(memberTicketId);
+    public List<LectureBooking> getBookingList(User user, Long userTicketId) {
+        List<UserTicket> userTickets = userTicketService.getAllByUser(user);
+        List<LectureBooking> lectureBookings = lectureBookingRepository.findByUserTicketInAndIsCanceled(userTickets, false);
+        return lectureBookings;
+    }
+
+    @Transactional
+    public LectureBooking book(Long userId, Long lectureItemId, Long userTicketId) {
+        UserTicket userTicket = userTicketService.getById(userTicketId);
         userTicket.validateUserOwner(userId);
         userTicket.validateRemainingCoupon();
+        userTicket.validateExpirationDate();
 
         LectureItem lectureItem = this.getLectureItemById(lectureItemId);
         lectureItem.validateExceedLectureBookingTime();

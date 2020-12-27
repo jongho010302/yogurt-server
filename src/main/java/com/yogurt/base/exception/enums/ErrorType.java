@@ -16,6 +16,7 @@ public enum ErrorType implements InterfaceErrorType {
     FILE_SIZE("file.size"),
     FILE_UPLOAD("file.upload"),
     INVALID_FORMAT("invalid.class.type.format"),
+    TICKET_EXPIRED("ticket.expired"),
     INVALID_SAME_EMAIL("invalid.same.email"),
     INVALID_SAME_PASSWORD("invalid.same.password"),
     INVALID_PARAM("invalid.param"),

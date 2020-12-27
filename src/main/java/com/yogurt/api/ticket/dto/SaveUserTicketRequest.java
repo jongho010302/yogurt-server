@@ -3,6 +3,7 @@ package com.yogurt.api.ticket.dto;
 import com.yogurt.api.ticket.domain.Ticket;
 import com.yogurt.api.ticket.domain.UserTicket;
 import com.yogurt.api.user.domain.User;
+import com.yogurt.base.util.DateUtils;
 import com.yogurt.validation.annotation.DateValid;
 import com.yogurt.validation.annotation.TicketValid;
 import com.yogurt.validation.annotation.UserValid;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -46,9 +48,8 @@ public class SaveUserTicketRequest {
                 .maxCancel(remainingCancel)
                 .remainingCoupon(remainingCoupon)
                 .remainingCancel(remainingCancel)
-                .startDate(startDate)
-                .endDate(endDate)
-                .isDeactivated(false)
+                .startDate(DateUtils.parse(startDate))
+                .endDate(DateUtils.parse(endDate))
                 .build();
     }
 }

@@ -71,7 +71,6 @@ public class SaveStaffRequest {
                 .birthday(Date.of(birthday))
                 .profileUrl(profileUrl)
                 .role(role)
-                .isDeleted(false)
                 .build();
 
         List<StaffSchedule> staffScheduleList = new ArrayList<>();
@@ -89,7 +88,6 @@ public class SaveStaffRequest {
                 .selfIntroduce(selfIntroduce)
                 .hiredAt(Date.of(hiredAt))
                 .schedules(staffScheduleList)
-                .isDeleted(true)
                 .build();
     }
 }

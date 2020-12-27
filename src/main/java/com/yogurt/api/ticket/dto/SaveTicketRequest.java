@@ -91,7 +91,6 @@ public class SaveTicketRequest {
                 .bookingStartTime(bookingStartTime)
                 .bookingEndTime(bookingEndTime)
                 .isSelling(isSelling)
-                .isDeactivated(false)
                 .build();
     }
 }
