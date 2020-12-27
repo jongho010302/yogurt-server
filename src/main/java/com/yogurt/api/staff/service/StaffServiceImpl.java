@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,8 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Transactional
-    public List<Staff> getAllWithFilter(Pageable pageable, Boolean isDisabled) {
-        return repository.getAllWithFilter(pageable, isDisabled);
+    public List<Staff> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
+        return repository.getAllWithFilter(pageable, isDeleted);
     }
 
     @Transactional
@@ -67,12 +68,15 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Transactional
-    public void deactivate(Long id) {
+    public void delete(Long id) {
         Staff staff = this.getById(id);
-        if (staff.getIsDisabled()) {
-            throw new YogurtAlreadyDataExistsException("이미 비활성화된 직원입니다.");
+        if (staff.getIsDeleted()) {
+            throw new YogurtAlreadyDataExistsException("이미 삭제된 직원입니다.");
         }
-        staff.setIsDisabled(true);
+        staff.setIsDeleted(true);
+        staff.setDeletedAt(new Date());
+
+        userService.delete(staff.getUser(), "from admin page");
         repository.save(staff);
     }
 

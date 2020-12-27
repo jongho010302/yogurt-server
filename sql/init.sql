@@ -1,3 +1,5 @@
+use yogurt;
+
 DROP DATABASE yogurt;
 
 CREATE DATABASE yogurt DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

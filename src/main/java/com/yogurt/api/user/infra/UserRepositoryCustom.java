@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface UserRepositoryCustom {
 
-    List<User> getAllWithFilter(Pageable pageable, Boolean isExit);
+    List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted);
 }

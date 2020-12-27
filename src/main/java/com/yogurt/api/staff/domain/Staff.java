@@ -33,7 +33,7 @@ public class Staff extends BaseEntity {
     private Date hiredAt;
 
     @Column(nullable = false)
-    private Boolean isDisabled;
+    private Boolean isDeleted;
 
     public String getHiredAt() {
         return hiredAt.getDate();

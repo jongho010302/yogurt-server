@@ -23,8 +23,8 @@ public class AdminStaffController {
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(Pageable pageable,
-                                              @RequestParam(required = false) Boolean isDisabled) {
-        List<Staff> staffList = service.getAllWithFilter(pageable, isDisabled);
+                                              @RequestParam(required = false) Boolean isDeleted) {
+        List<Staff> staffList = service.getAllWithFilter(pageable, isDeleted);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프 리스트입니다.", staffList, Meta.of(pageable, staffList.size())), HttpStatus.OK);
     }
@@ -43,14 +43,14 @@ public class AdminStaffController {
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프가 저장되었습니다.", staff), HttpStatus.OK);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<ApiResponse> delete(@RequestParam Long id) {
-        service.deactivate(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
+        service.delete(id);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프가 삭제되었습니다."), HttpStatus.OK);
     }
 
-    @PutMapping("/reset-password")
+    @PutMapping("/password/{id}")
     public ResponseEntity<ApiResponse> resetStaffPassword(@PathVariable Long id) {
         service.resetPassword(id);
 

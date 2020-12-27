@@ -26,9 +26,10 @@ public class StaffRepositoryImpl extends QuerydslRepositorySupport implements St
         this.queryFactory = queryFactory;
     }
 
-    public List<Staff> getAllWithFilter(Pageable pageable, Boolean isDisabled) {
+    public List<Staff> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
         JPAQuery<Staff> query = queryFactory
-                .selectFrom(staff);
+                .selectFrom(staff)
+                .where(eqIsDeleted(isDeleted));
 
         QueryResults<Staff> result = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetchResults();
@@ -40,10 +41,10 @@ public class StaffRepositoryImpl extends QuerydslRepositorySupport implements St
         return staffList;
     }
 
-    private BooleanExpression eqIsDisabled(Boolean isDisabled) {
-        if (StringUtils.isEmpty(isDisabled)) {
+    private BooleanExpression eqIsDeleted(Boolean isDeleted) {
+        if (StringUtils.isEmpty(isDeleted)) {
             return null;
         }
-        return staff.isDisabled.eq(isDisabled);
+        return staff.isDeleted.eq(isDeleted);
     }
 }

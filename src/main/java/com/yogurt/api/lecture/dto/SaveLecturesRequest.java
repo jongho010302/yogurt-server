@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -64,82 +65,8 @@ public class SaveLecturesRequest {
     @NotEmpty(message = "당일 예약 변경 종료 시간은 필수 값입니다.")
     private String bookingChangeEndTime;
 
-    @NotNull(message = "월요일 수업 여부는 필수 값입니다.")
-    private Boolean hasMonClass;
-
-    @TimeValid(message = "월요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "월요일 수업 시작 시간은 필수 값입니다.")
-    private String monClassStartTime;
-
-    @TimeValid(message = "월요일 수업 종료 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "월요일 수업 종료 시간은 필수 값입니다.")
-    private String monClassEndTime;
-
-    @NotNull(message = "화요일 수업 여부는 필수 값입니다.")
-    private Boolean hasTueClass;
-
-    @TimeValid(message = "화요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "화요일 수업 여부는 필수 값입니다.")
-    private String tueClassStartTime;
-
-    @TimeValid(message = "화요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "화요일 수업 여부는 필수 값입니다.")
-    private String tueClassEndTime;
-
-    @NotNull(message = "수요일 수업 여부는 필수 값입니다.")
-    private Boolean hasWedClass;
-
-    @TimeValid(message = "수요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "수요일 수업 시작 시간은 필수 값입니다.")
-    private String wedClassStartTime;
-
-    @TimeValid(message = "수요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "수요일 수업 종료 시간 필수 값입니다.")
-    private String wedClassEndTime;
-
-    @NotNull(message = "목요일 수업 여부는 필수 값입니다.")
-    private Boolean hasThuClass;
-
-    @TimeValid(message = "목요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "목요일 수업 시작 시간은 필수 값입니다.")
-    private String thuClassStartTime;
-
-    @TimeValid(message = "목요일 수업 종료 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "목요일 수업 종료 시간은 필수 값입니다.")
-    private String thuClassEndTime;
-
-    @NotNull(message = "금요일 수업 여부는 필수 값입니다.")
-    private Boolean hasFriClass;
-
-    @TimeValid(message = "금요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "금요일 수업 시작 시간은 필수 값입니다.")
-    private String friClassStartTime;
-
-    @TimeValid(message = "금요일 수업 종료 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "금요일 수업 종료 시간은 필수 값입니다.")
-    private String friClassEndTime;
-
-    @NotNull(message = "토요일 수업 여부는 필수 값입니다.")
-    private Boolean hasSatClass;
-
-    @TimeValid(message = "토요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "토요일 수업 시작 시간은 필수 값입니다.")
-    private String satClassStartTime;
-
-    @TimeValid(message = "토요일 수업 종료 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "토요일 수업 종료 시간은 필수 값입니다.")
-    private String satClassEndTime;
-
-    @NotNull(message = "일요일 수업 여부는 필수 값입니다.")
-    private Boolean hasSunClass;
-
-    @TimeValid(message = "일요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "일요일 수업 시작 시간은 필수 값입니다.")
-    private String sunClassStartTime;
-
-    @TimeValid(message = "일요일 수업 시작 시간의 형식을 맞춰주세요.", time = TimeEnum.TIME_48)
-    @NotEmpty(message = "일요일 수업 종료 시간은 필수 값입니다.")
-    private String sunClassEndTime;
+    @NotNull(message = "근무일자는 필수 값입니다.")
+    private List<LectureSchedule> schedules;
 
     public Lecture toLectureEntity() {
         Staff staff = new Staff();

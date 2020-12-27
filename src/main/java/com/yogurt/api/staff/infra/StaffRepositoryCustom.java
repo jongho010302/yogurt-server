@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface StaffRepositoryCustom {
 
-    List<Staff> getAllWithFilter(Pageable pageable, Boolean isDisabled);
+    List<Staff> getAllWithFilter(Pageable pageable, Boolean isDeleted);
 }

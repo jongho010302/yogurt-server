@@ -41,17 +41,17 @@ public class User extends BaseEntity {
 
     private Phone phone;
 
-    @Column(nullable = false)
+    @Column
     private String profileUrl;
 
     @Column(nullable = false)
     private String role;
 
     @Column(nullable = false)
-    private Boolean isExit;
+    private Boolean isDeleted;
 
     @Column
-    private String exitReason;
+    private String deleteReason;
 
     @Transient
     private String displayRole;

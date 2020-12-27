@@ -43,7 +43,6 @@ public class SaveUserRequest {
     @NotEmpty(message = "핸드폰 번호는 필수 값입니다.")
     private String phone;
 
-    @NotEmpty(message = "프로필은 필수 값입니다.")
     private String profileUrl;
 
     @NotEmpty(message = "인증번호는 필수 값입니다.")
@@ -60,7 +59,7 @@ public class SaveUserRequest {
                 .phone(Phone.of(phone))
                 .profileUrl(profileUrl)
                 .role("ROLE_MEMBER")
-                .isExit(false)
+                .isDeleted(false)
                 .build();
     }
 

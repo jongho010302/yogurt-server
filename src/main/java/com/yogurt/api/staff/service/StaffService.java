@@ -11,13 +11,11 @@ public interface StaffService {
 
     Staff getById(Long id);
 
-    Staff getByUser(User user);
-
-    List<Staff> getAllWithFilter(Pageable pageable, Boolean isDisabled);
+    List<Staff> getAllWithFilter(Pageable pageable, Boolean isDeleted);
 
     Staff saveStaff(SaveStaffRequest saveStaffRequest);
 
-    void deactivate(Long id);
+    void delete(Long id);
 
     void resetPassword(long userId);
 

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@Profile(value = {"local", "development", "production"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -59,20 +59,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http
-                .httpBasic().disable() // restapi만 고려해 기본 설정은 해제.
-                .csrf().disable() // csrf 보안 토큰 disable처리.
+                .httpBasic().disable()
+                .csrf().disable()
                 .cors()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 X
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests() // 요청에 대한 사용권한 체크
+                .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/actuator/health").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/tokens").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/auth/users").authenticated()
+                .antMatchers("/common/**").permitAll()
+                .antMatchers("/user/**").hasAnyRole("DEVELOPER", "MEMBER")
                 .antMatchers("/admin/**").hasAnyRole("DEVELOPER", "OWNER", "MANAGER")
                 .antMatchers("/staff/**").hasAnyRole("DEVELOPER", "OWNER", "MANAGER", "INSTRUCTOR")
-                .antMatchers("/member/**").hasAnyRole("DEVELOPER", "MEMBER")
-                .antMatchers("/common/**").permitAll()
-                .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler).authenticationEntryPoint(customAuthenticationEntryPointHandler)

@@ -2,7 +2,9 @@ package com.yogurt.base.security;
 
 import com.yogurt.api.auth.domain.TokenBlacklist;
 import com.yogurt.api.auth.domain.TokenBlacklistRepository;
+import com.yogurt.api.user.domain.User;
 import com.yogurt.base.dto.ApiResponse;
+import com.yogurt.base.exception.YogurtAlreadyDataUseException;
 import com.yogurt.base.util.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,12 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken(request);
 
-        if (request.getRequestURI().matches("^\\/auth\\/.*")) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if (token == null) {
+        if (token == null || token == "") {
             chain.doFilter(request, response);
             return;
         }
@@ -54,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Optional<TokenBlacklist> tokenBlacklist = tokenBlacklistRepository.findByToken(token);
 
         if (tokenBlacklist.isPresent()) {
-            ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("당신은 로그아웃되었습니다. 다시 로그인 후 이용해주세요.");
+            ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("로그아웃된 유저의 인증 토큰입니다.");
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -65,6 +62,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        User user = (User) authentication.getPrincipal();
+        if (user.getIsDeleted()) {
+            ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("삭제된 유저의 인증 토큰입니다.");
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(JsonUtils.convertObjectToJson(apiResponse));
+            response.flushBuffer();
+            return;
+        }
 
         // SecurityContext 에 Authentication 객체를 저장합니다.
         SecurityContextHolder.getContext().setAuthentication(authentication);

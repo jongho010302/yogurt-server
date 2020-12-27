@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/check")
+    @GetMapping("")
     public ResponseEntity<ApiResponse> checkUser(@AuthenticationPrincipal User user) {
         User checkedUser = userService.checkUser(user);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("유저 체크 성공.", checkedUser), HttpStatus.OK);
@@ -55,11 +55,5 @@ public class UserController {
     public ResponseEntity<ApiResponse> changeEmail(@AuthenticationPrincipal User user, @RequestBody @Validated ChangeEmailRequest changeEmailRequest, HttpServletRequest request) {
         userService.changeEmail(user.getId(), changeEmailRequest);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("이메일이 변경되었습니다."), HttpStatus.OK);
-    }
-
-    @PostMapping("/exit")
-    public ResponseEntity<ApiResponse> exit(@AuthenticationPrincipal User user, @RequestBody @Validated ExitRequest exitRequest) {
-        User changedUser = userService.exit(user.getId(), exitRequest.getExitReason());
-        return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원탈퇴 되었습니다.", changedUser), HttpStatus.OK);
     }
 }

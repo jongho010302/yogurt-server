@@ -31,6 +31,11 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Transactional
     public void sendSignupCode(String email) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (isUserExists) {
+            throw new YogurtAlreadyDataExistsException("이미 가입된 이메일입니다. 다른 이메일을 사용해주세요.");
+        }
+
         String verificationCode = getVerificationCode();
 
         repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));
@@ -62,6 +67,11 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Transactional
     public void sendFindPasswordCode(String email) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (!isUserExists) {
+            throw new YogurtAlreadyDataExistsException("가입되지 않은 이메일입니다. 다른 이메일을 사용해주세요.");
+        }
+
         String verificationCode = getVerificationCode();
 
         repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));
@@ -84,6 +94,11 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Transactional
     public void sendChangeEmailCode(String email) {
+        boolean isUserExists = existsUserByEmail(email);
+        if (!isUserExists) {
+            throw new YogurtAlreadyDataExistsException("가입되지 않은 이메일입니다. 다른 이메일을 사용해주세요.");
+        }
+
         String verificationCode = getVerificationCode();
 
         repository.save(Verification.of(email, verificationCode, VerificationType.VERIFICATION_TYPE.SIGNUP.toString()));

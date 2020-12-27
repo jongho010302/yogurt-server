@@ -23,8 +23,8 @@ public class AdminUserController {
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(Pageable pageable,
-                                              @RequestParam(required = false) Boolean isExit) {
-        List<User> userList = userService.getAllWithFilter(pageable, isExit);
+                                              @RequestParam(required = false) Boolean isDeleted) {
+        List<User> userList = userService.getAllWithFilter(pageable, isDeleted);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("유저 리스트입니다.", userList, Meta.of(pageable, userList.size())), HttpStatus.OK);
     }
 

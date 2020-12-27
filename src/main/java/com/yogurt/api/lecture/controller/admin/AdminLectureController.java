@@ -25,5 +25,4 @@ public class AdminLectureController {
         Lecture lecture = service.save(saveLecturesRequest);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("수업이 저장되었습니다.", lecture), HttpStatus.OK);
     }
-
 }

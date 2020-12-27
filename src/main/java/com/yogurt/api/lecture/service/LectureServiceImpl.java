@@ -1,5 +1,6 @@
 package com.yogurt.api.lecture.service;
 
+import com.yogurt.api.lecture.dto.LectureSchedule;
 import com.yogurt.base.exception.YogurtAlreadyBookedException;
 import com.yogurt.base.exception.YogurtBookingEntryExceedException;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
@@ -23,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,28 +58,6 @@ public class LectureServiceImpl implements LectureService {
         Lecture lecture = saveLecturesRequest.toLectureEntity();
         Staff staff = staffService.getById(saveLecturesRequest.getStaffId());
 
-        boolean hasSunClass = saveLecturesRequest.getHasSunClass();
-        String sunClassStartTime = saveLecturesRequest.getSunClassStartTime();
-        String sunClassEndTime = saveLecturesRequest.getSunClassEndTime();
-        boolean hasMonClass = saveLecturesRequest.getHasMonClass();
-        String monClassStartTime = saveLecturesRequest.getMonClassStartTime();
-        String monClassEndTime = saveLecturesRequest.getMonClassEndTime();
-        boolean hasTueClass = saveLecturesRequest.getHasTueClass();
-        String tueClassStartTime = saveLecturesRequest.getTueClassStartTime();
-        String tueClassEndTime = saveLecturesRequest.getTueClassEndTime();
-        boolean hasWedClass = saveLecturesRequest.getHasWedClass();
-        String wedClassStartTime = saveLecturesRequest.getWedClassStartTime();
-        String wedClassEndTime = saveLecturesRequest.getWedClassEndTime();
-        boolean hasThuClass = saveLecturesRequest.getHasThuClass();
-        String thuClassStartTime = saveLecturesRequest.getThuClassStartTime();
-        String thuClassEndTime = saveLecturesRequest.getThuClassEndTime();
-        boolean hasFriClass = saveLecturesRequest.getHasFriClass();
-        String friClassStartTime = saveLecturesRequest.getFriClassStartTime();
-        String friClassEndTime = saveLecturesRequest.getFriClassEndTime();
-        boolean hasSatClass = saveLecturesRequest.getHasSatClass();
-        String satClassStartTime = saveLecturesRequest.getSatClassStartTime();
-        String satClassEndTime = saveLecturesRequest.getSatClassEndTime();
-
         String bookingEndTime = saveLecturesRequest.getBookingEndTime();
         String bookingCancelEndTime = saveLecturesRequest.getBookingCancelEndTime();
         String bookingChangeEndTime = saveLecturesRequest.getBookingChangeEndTime();
@@ -87,108 +67,77 @@ public class LectureServiceImpl implements LectureService {
         Date currentDate = startDate;
 
         while (currentDate.compareTo(endDate) <= 0) {
+            Calendar currentCalendar = Calendar.getInstance();
+            currentCalendar.setTime(currentDate);
+
             LectureItem lectureItem = saveLecturesRequest.toLectureItemEntity(lecture, staff);
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(currentDate);
+            int currentDayOfWeek = currentCalendar.get(Calendar.DAY_OF_WEEK);
+            Optional<LectureSchedule> optionalSchedule = this.getOptionalSchedule(saveLecturesRequest.getSchedules(), currentDayOfWeek);
 
-            String classStartTime = "";
-            String classEndTime = "";
+            // 수업이 있을 경우
+            if (optionalSchedule.isPresent()) {
+                Calendar scheduleCalendar = (Calendar) currentCalendar.clone();
+                LectureSchedule lectureSchedule = optionalSchedule.get();
 
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-            switch (dayNum) {
-                case 1:
-                    if (hasSunClass) {
-                        classStartTime = sunClassStartTime;
-                        classEndTime = sunClassEndTime;
-                    }
-                    break;
-                case 2:
-                    if (hasMonClass) {
-                        classStartTime = monClassStartTime;
-                        classEndTime = monClassEndTime;
-                    }
-                    break;
-                case 3:
-                    if (hasTueClass) {
-                        classStartTime = tueClassStartTime;
-                        classEndTime = tueClassEndTime;
-                    }
-                    break;
-                case 4:
-                    if (hasWedClass) {
-                        classStartTime = wedClassStartTime;
-                        classEndTime = wedClassEndTime;
-                    }
-                    break;
-                case 5:
-                    if (hasThuClass) {
-                        classStartTime = thuClassStartTime;
-                        classEndTime = thuClassEndTime;
-                    }
-                    break;
-                case 6:
-                    if (hasFriClass) {
-                        classStartTime = friClassStartTime;
-                        classEndTime = friClassEndTime;
-                    }
-                    break;
-                case 7:
-                    if (hasSatClass) {
-                        classStartTime = satClassStartTime;
-                        classEndTime = satClassEndTime;
-                    }
-                    break;
+                String classStartTime = lectureSchedule.getStartTime();
+                String classEndTime = lectureSchedule.getEndTime();
+
+                // 수업 시작 시간
+                scheduleCalendar.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
+                scheduleCalendar.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
+                lectureItem.setStartAt(DateUtils.format(scheduleCalendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+
+                // 수업 종료 시간
+                scheduleCalendar.set(Calendar.HOUR, Integer.parseInt(classEndTime.substring(0, 2)));
+                scheduleCalendar.set(Calendar.MINUTE, Integer.parseInt(classEndTime.substring(3, 5)));
+                lectureItem.setEndAt(DateUtils.format(scheduleCalendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+
+                // 예약 종료 시간
+                scheduleCalendar.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
+                scheduleCalendar.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
+                scheduleCalendar.add(Calendar.HOUR, -Integer.parseInt(bookingEndTime.substring(0, 2)));
+                scheduleCalendar.add(Calendar.MINUTE, -Integer.parseInt(bookingEndTime.substring(3, 5)));
+                lectureItem.setBookingEndAt(DateUtils.format(scheduleCalendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+
+                // 예약 취소 종료 시간
+                scheduleCalendar.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
+                scheduleCalendar.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
+                scheduleCalendar.add(Calendar.HOUR, -Integer.parseInt(bookingCancelEndTime.substring(0, 2)));
+                scheduleCalendar.add(Calendar.MINUTE, -Integer.parseInt(bookingCancelEndTime.substring(3, 5)));
+                lectureItem.setBookingCancelEndAt(DateUtils.format(scheduleCalendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+
+                // 예약 변경 종료 시간
+                scheduleCalendar.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
+                scheduleCalendar.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
+                scheduleCalendar.add(Calendar.HOUR, -Integer.parseInt(bookingChangeEndTime.substring(0, 2)));
+                scheduleCalendar.add(Calendar.MINUTE, -Integer.parseInt(bookingChangeEndTime.substring(3, 5)));
+                lectureItem.setBookingChangeEndAt(DateUtils.format(scheduleCalendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+
+                lecture.getLectureItems().add(lectureItem);
             }
 
-            if (classStartTime.equals("")) {
-                cal.setTime(currentDate);
-                cal.add(Calendar.DAY_OF_MONTH, 1);
-                currentDate = cal.getTime();
-                continue;
-            }
-
-            // 수업 시작 시간
-            cal.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
-            lectureItem.setStartAt(DateUtils.format(cal.getTime(), "yyyy-MM-dd HH:mm:ss"));
-
-            // 수업 종료 시간
-            cal.set(Calendar.HOUR, Integer.parseInt(classEndTime.substring(0, 2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(classEndTime.substring(3, 5)));
-            lectureItem.setEndAt(DateUtils.format(cal.getTime(), "yyyy-MM-dd HH:mm:ss"));
-
-            // 예약 종료 시간
-            // 초기화
-            cal.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
-            cal.add(Calendar.HOUR, -Integer.parseInt(bookingEndTime.substring(0, 2)));
-            cal.add(Calendar.MINUTE, -Integer.parseInt(bookingEndTime.substring(3, 5)));
-            lectureItem.setBookingEndAt(DateUtils.format(cal.getTime(), "yyyy-MM-dd HH:mm:ss"));
-
-            // 예약 취소 종료 시간
-            // 초기화
-            cal.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
-            cal.add(Calendar.HOUR, -Integer.parseInt(bookingCancelEndTime.substring(0, 2)));
-            cal.add(Calendar.MINUTE, -Integer.parseInt(bookingCancelEndTime.substring(3, 5)));
-            lectureItem.setBookingCancelEndAt(DateUtils.format(cal.getTime(), "yyyy-MM-dd HH:mm:ss"));
-
-            // 예약 변경 종료 시간
-            // 초기화
-            cal.set(Calendar.HOUR, Integer.parseInt(classStartTime.substring(0, 2)));
-            cal.set(Calendar.MINUTE, Integer.parseInt(classStartTime.substring(3, 5)));
-            cal.add(Calendar.HOUR, -Integer.parseInt(bookingChangeEndTime.substring(0, 2)));
-            cal.add(Calendar.MINUTE, -Integer.parseInt(bookingChangeEndTime.substring(3, 5)));
-            lectureItem.setBookingChangeEndAt(DateUtils.format(cal.getTime(), "yyyy-MM-dd HH:mm:ss"));
-
-            lecture.getLectureItems().add(lectureItem);
-
-            cal.setTime(currentDate);
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            currentDate = cal.getTime();
+            addOneDay(currentCalendar);
+            currentDate = currentCalendar.getTime();
         }
-        return lectureRepository.save(lecture);
+
+        Lecture savedLecture = lectureRepository.save(lecture);
+        return savedLecture;
+    }
+
+    /**
+     * 수업이 있는 날인지 검색한다.
+     */
+    private Optional<LectureSchedule> getOptionalSchedule(List<LectureSchedule> schedules, int currentDayOfWeek) {
+        Optional<LectureSchedule> optionalSchedule = schedules
+                .stream()
+                .filter(schedule -> schedule.getHasClass() && schedule.getDayOfWeek() == currentDayOfWeek)
+                .findFirst();
+        return optionalSchedule;
+    }
+
+    private void addOneDay(Calendar calendar) {
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
     }
 
     @Transactional

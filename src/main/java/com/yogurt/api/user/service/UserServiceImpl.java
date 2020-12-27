@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +47,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User checkUser(User user) {
         return this.getById(user.getId());
-    }
-
-    @Transactional
-    public User save(User user) {
-        return repository.save(user);
     }
 
     @Transactional
@@ -129,6 +125,21 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
+    public User delete(User user, String deleteReason) {
+        user.setIsDeleted(true);
+        user.setDeletedAt(new Date());
+        user.setDeleteReason(deleteReason);
+        return repository.save(user);
+    }
+
+    public User delete(Long id, String deleteReason) {
+        User user = this.getById(id);
+        user.setIsDeleted(true);
+        user.setDeletedAt(new Date());
+        user.setDeleteReason(deleteReason);
+        return repository.save(user);
+    }
+
     public User getByEmail(String email) {
         User user = repository.findByEmail(Email.of(email)).orElseThrow(() -> new YogurtEntityNotFountException("해당 이메일로 등록된 유저가 없습니다."));
         return user;
@@ -138,15 +149,8 @@ public class UserServiceImpl implements UserService {
         return repository.existsByEmail(Email.of(email));
     }
 
-    public List<User> getAllWithFilter(Pageable pageable, Boolean isExit) {
-        return repository.getAllWithFilter(pageable, isExit);
-    }
-
-    public User exit(Long id, String exitReason) {
-        User user = this.getById(id);
-        user.setIsExit(true);
-        user.setExitReason(exitReason);
-        return repository.save(user);
+    public List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
+        return repository.getAllWithFilter(pageable, isDeleted);
     }
 
     @Transactional

@@ -6,26 +6,25 @@ import com.yogurt.api.auth.dto.FindPasswordRequest;
 import com.yogurt.api.auth.dto.LoginRequest;
 import com.yogurt.api.auth.dto.LoginResponse;
 import com.yogurt.api.auth.dto.SaveUserRequest;
+import com.yogurt.api.mail.service.MailService;
+import com.yogurt.api.user.domain.User;
+import com.yogurt.api.user.infra.UserRepository;
+import com.yogurt.api.user.service.UserService;
 import com.yogurt.base.crypto.CryptoService;
 import com.yogurt.base.exception.YogurtAlreadyDataUseException;
-import com.yogurt.base.exception.YogurtDataNotExistsException;
 import com.yogurt.base.exception.YogurtNoAuthException;
 import com.yogurt.base.exception.YogurtWrongPasswordException;
 import com.yogurt.base.security.JwtTokenProvider;
 import com.yogurt.base.util.StringUtils;
 import com.yogurt.generic.user.domain.VerificationType;
-import com.yogurt.api.mail.service.MailService;
-import com.yogurt.api.user.domain.User;
-import com.yogurt.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +42,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
 
+    private final UserRepository userRepository;
+
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userService.getByEmail(loginRequest.getEmail());
@@ -52,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             throw new YogurtWrongPasswordException("잘못된 비밀번호입니다.");
         }
 
-        if (user.getIsExit()) {
+        if (user.getIsDeleted()) {
             throw new YogurtNoAuthException("탈퇴된 회원입니다.");
         }
 
@@ -79,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
         this.saveUserSendMail(user);
 
-        return userService.save(user);
+        return userRepository.save(user);
     }
 
     private void saveUserSendMail(User user) {

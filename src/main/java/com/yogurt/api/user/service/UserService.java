@@ -14,8 +14,6 @@ public interface UserService {
 
     User checkUser(User user);
 
-    User save(User user);
-
     User changeName(Long id, String name);
 
     User changePhone(Long id, String phone);
@@ -28,11 +26,13 @@ public interface UserService {
 
     User getByEmail(String Email);
 
-    List<User> getAllWithFilter(Pageable pageable, Boolean isExit);
+    User delete(User user, String deleteReason);
+
+    User delete(Long id, String deleteReason);
+
+    List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted);
 
     boolean existsByEmail(String email);
-
-    User exit(Long id, String exit);
 
     User changePassword(Long userId, String rawPassword);
 

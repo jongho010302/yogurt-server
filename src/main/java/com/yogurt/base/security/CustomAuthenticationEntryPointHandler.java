@@ -2,6 +2,7 @@ package com.yogurt.base.security;
 
 import com.google.gson.Gson;
 import com.yogurt.base.dto.ApiResponse;
+import com.yogurt.base.exception.YogurtException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

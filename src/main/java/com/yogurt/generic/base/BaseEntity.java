@@ -26,4 +26,5 @@ public class BaseEntity {
     @UpdateTimestamp
     private Date updatedAt;
 
+    private Date deletedAt;
 }

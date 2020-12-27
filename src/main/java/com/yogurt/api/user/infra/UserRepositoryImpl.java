@@ -26,10 +26,10 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
         this.queryFactory = queryFactory;
     }
 
-    public List<User> getAllWithFilter(Pageable pageable, Boolean isExit) {
+    public List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
         JPAQuery<User> query = queryFactory
                 .selectFrom(user)
-                .where(eqIsExit(isExit));
+                .where(eqIsDeleted(isDeleted));
 
         QueryResults<User> result = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetchResults();
@@ -41,11 +41,11 @@ public class UserRepositoryImpl extends QuerydslRepositorySupport implements Use
         return userList;
     }
 
-    private BooleanExpression eqIsExit(Boolean isExit) {
-        if (isExit == null) {
+    private BooleanExpression eqIsDeleted(Boolean isDeleted) {
+        if (isDeleted == null) {
             return null;
         }
-        return user.isExit.eq(isExit);
+        return user.isDeleted.eq(isDeleted);
     }
 
 }

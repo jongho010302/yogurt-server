@@ -43,7 +43,6 @@ public class SaveStaffRequest {
     @NotEmpty(message = "핸드폰 번호는 필수 값입니다.")
     private String phone;
 
-    @NotEmpty(message = "프로필은 필수 값입니다.")
     private String profileUrl;
 
     @UserRoleValid
@@ -72,7 +71,7 @@ public class SaveStaffRequest {
                 .birthday(Date.of(birthday))
                 .profileUrl(profileUrl)
                 .role(role)
-                .isExit(false)
+                .isDeleted(false)
                 .build();
 
         List<StaffSchedule> staffScheduleList = new ArrayList<>();
@@ -90,7 +89,7 @@ public class SaveStaffRequest {
                 .selfIntroduce(selfIntroduce)
                 .hiredAt(Date.of(hiredAt))
                 .schedules(staffScheduleList)
-                .isDisabled(true)
+                .isDeleted(true)
                 .build();
     }
 }
