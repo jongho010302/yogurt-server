@@ -5,6 +5,7 @@ import com.yogurt.base.dto.Meta;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.dto.admin.ChangeRoleRequest;
 import com.yogurt.api.user.service.UserService;
+import com.yogurt.generic.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

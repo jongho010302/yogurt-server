@@ -23,7 +23,7 @@ public class Phone {
     @Transient
     private final Pattern pattern = Pattern.compile(PATTERN);
 
-    @Column(length = 13, nullable = false)
+    @Column(length = 13)
     private String phone;
 
     public Phone(String phone) {

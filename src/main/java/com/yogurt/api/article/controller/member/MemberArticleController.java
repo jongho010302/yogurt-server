@@ -2,6 +2,7 @@ package com.yogurt.api.article.controller.member;
 
 import com.yogurt.api.article.domain.Article;
 import com.yogurt.api.article.service.ArticleService;
+import com.yogurt.api.auth.domain.AuthContext;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.base.dto.Meta;
@@ -22,15 +23,15 @@ public class MemberArticleController {
     private final ArticleService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user, Pageable pageable) {
+    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal AuthContext authContext, Pageable pageable) {
         // 회원은 삭제된 게시글을 조회할 수 없다. 그래서 AdminArticleController 와 다르게 isDeleted 를 파라미터로 받지 않고 이곳에서 false 을 넣어준다.
-        List<Article> articleList = service.getByFilter(pageable, user.getStudioId(), false);
+        List<Article> articleList = service.getByFilter(pageable, authContext.getStudioId(), false);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글 리스트입니다.", articleList, Meta.of(pageable, articleList.size())), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse> get(@AuthenticationPrincipal User user, @PathVariable Long id) {
-        Article article = service.getByIdAndStudioId(id, user.getStudioId());
+    public ResponseEntity<ApiResponse> get(@AuthenticationPrincipal AuthContext authContext, @PathVariable Long id) {
+        Article article = service.getByIdAndStudioId(id, authContext.getStudioId());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글입니다.", article), HttpStatus.OK);
     }
 }

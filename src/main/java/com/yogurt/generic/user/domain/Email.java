@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Embeddable
 public class Email {
 
-    public static final String PATTERN = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+    public static final String PATTERN = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
     public static final String PATTERN_MESSAGE = "이메일의 형식을 맞춰주세요.";
 
     @JsonIgnore

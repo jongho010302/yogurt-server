@@ -11,6 +11,9 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class SaveArticleRequest {
 
+    @NotEmpty(message = "센터 id는 필수 값입니다.")
+    private long studioId;
+
     @NotEmpty(message = "수강권은 필수 값입니다.")
     private String title;
 
@@ -19,7 +22,7 @@ public class SaveArticleRequest {
 
     public Article toEntity(User user) {
         return Article.builder()
-                .studioId(user.getStudioId())
+                .studioId(studioId)
                 .user(user)
                 .title(title)
                 .content(content)

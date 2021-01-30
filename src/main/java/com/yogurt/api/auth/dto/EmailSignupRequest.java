@@ -1,24 +1,21 @@
 package com.yogurt.api.auth.dto;
 
-import com.yogurt.generic.user.domain.Date;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Gender;
-import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.api.user.domain.AuthType;
 import com.yogurt.api.user.domain.User;
-import com.yogurt.validation.annotation.*;
+import com.yogurt.generic.user.domain.Email;
+import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.generic.user.domain.UserRole;
+import com.yogurt.validation.annotation.EmailValid;
+import com.yogurt.validation.annotation.PasswordValid;
+import com.yogurt.validation.annotation.PhoneValid;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class SaveUserRequest {
-
-    @StudioValid
-    @NotNull(message = "센터는 필수 값입니다.")
-    private Long studioId;
+public class EmailSignupRequest {
 
     @PasswordValid
     @NotEmpty(message = "비밀번호는 필수 값입니다.")
@@ -31,14 +28,6 @@ public class SaveUserRequest {
     @NotEmpty(message = "이름은 필수 값입니다.")
     private String name;
 
-    @GenderValid
-    @NotEmpty(message = "성별은 필수 값입니다.")
-    private String gender;
-
-    @DateValid(message = "생일의 형식을 맞춰 주세요.")
-    @NotEmpty(message = "생일은 필수 값입니다.")
-    private String birthday;
-
     @PhoneValid
     @NotEmpty(message = "핸드폰 번호는 필수 값입니다.")
     private String phone;
@@ -50,15 +39,13 @@ public class SaveUserRequest {
 
     public User toEntity(String password) {
         return User.builder()
-                .studioId(studioId)
                 .password(password)
                 .email(Email.of(email))
+                .authType(AuthType.Email)
                 .name(name)
-                .gender(Gender.of(gender))
-                .birthday(Date.of(birthday))
                 .phone(Phone.of(phone))
                 .profileUrl(profileUrl)
-                .role("ROLE_MEMBER")
+                .role(UserRole.RoleEnum.ROLE_MEMBER)
                 .build();
     }
 

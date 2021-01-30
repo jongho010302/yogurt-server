@@ -1,5 +1,6 @@
 package com.yogurt.api.ticket.controller.user;
 
+import com.yogurt.api.auth.domain.AuthContext;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.api.ticket.domain.UserTicket;
 import com.yogurt.api.ticket.service.UserTicketService;
@@ -22,8 +23,8 @@ public class UserTicketController {
     private final UserTicketService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal User user) {
-        List<UserTicket> userTicketList = service.getAllByUser(user);
+    public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal AuthContext authContext) {
+        List<UserTicket> userTicketList = service.getAllByUser(authContext.getUser());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원의 수강권이 조회되었습니다.", userTicketList), HttpStatus.OK);
     }
 }

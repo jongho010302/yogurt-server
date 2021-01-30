@@ -2,11 +2,11 @@ package com.yogurt.api.staff.dto;
 
 import com.yogurt.generic.user.domain.Date;
 import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Gender;
 import com.yogurt.generic.user.domain.Phone;
 import com.yogurt.api.staff.domain.Staff;
 import com.yogurt.api.staff.domain.StaffSchedule;
 import com.yogurt.api.user.domain.User;
+import com.yogurt.generic.user.domain.UserRole;
 import com.yogurt.validation.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,10 +31,6 @@ public class SaveStaffRequest {
     @NotEmpty(message = "이름은 필수 값입니다.")
     private String name;
 
-    @GenderValid
-    @NotEmpty(message = "성별은 필수 값입니다.")
-    private String gender;
-
     @DateValid(message = "생일의 형식을 맞춰 주세요.")
     @NotEmpty(message = "생일은 필수 값입니다.")
     private String birthday;
@@ -47,7 +43,7 @@ public class SaveStaffRequest {
 
     @UserRoleValid
     @NotEmpty(message = "직급은 필수 값입니다.")
-    private String role;
+    private UserRole.RoleEnum role;
 
     @NotEmpty(message = "자기소개는 필수 값입니다.")
     private String selfIntroduce;
@@ -61,14 +57,11 @@ public class SaveStaffRequest {
 
     public Staff toEntity(String password) {
         User user = User.builder()
-                .studioId(studioId)
                 .email(Email.of(email))
                 .password(password)
                 .name(name)
-                .gender(Gender.of(gender))
                 .name(name)
                 .phone(Phone.of(phone))
-                .birthday(Date.of(birthday))
                 .profileUrl(profileUrl)
                 .role(role)
                 .build();

@@ -2,37 +2,35 @@ package com.yogurt.api.auth.service;
 
 import com.yogurt.api.auth.domain.TokenBlacklist;
 import com.yogurt.api.auth.domain.TokenBlacklistRepository;
-import com.yogurt.api.auth.dto.FindPasswordRequest;
-import com.yogurt.api.auth.dto.LoginRequest;
-import com.yogurt.api.auth.dto.LoginResponse;
-import com.yogurt.api.auth.dto.SaveUserRequest;
-import com.yogurt.api.mail.service.MailService;
+import com.yogurt.api.auth.dto.*;
+import com.yogurt.api.auth.dto.oauth.FacebookOAuthResponse;
+import com.yogurt.api.auth.dto.oauth.GoogleOAuthResponse;
+import com.yogurt.api.studio.domain.Studio;
+import com.yogurt.api.studio.service.StudioService;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.infra.UserRepository;
 import com.yogurt.api.user.service.UserService;
 import com.yogurt.base.crypto.CryptoService;
-import com.yogurt.base.exception.YogurtAlreadyDataUseException;
-import com.yogurt.base.exception.YogurtNoAuthException;
-import com.yogurt.base.exception.YogurtWrongPasswordException;
+import com.yogurt.base.exception.*;
 import com.yogurt.base.security.JwtTokenProvider;
 import com.yogurt.base.util.StringUtils;
+import com.yogurt.generic.user.domain.UserRole;
 import com.yogurt.generic.user.domain.VerificationType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserService userService;
+    private final StudioService studioService;
 
-    private final MailService mailService;
+    private final UserService userService;
 
     private final VerificationService verificationService;
 
@@ -44,50 +42,117 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
+    private final OAuthService oauthService;
+
+    private final AuthMailService authMailService;
+
     @Transactional
-    public LoginResponse login(LoginRequest loginRequest) {
-        User user = userService.getByEmail(loginRequest.getEmail());
-
-        boolean isSamePassword = cryptoService.compare(loginRequest.getPassword(), user.getPassword());
-        if (!isSamePassword) {
-            throw new YogurtWrongPasswordException("잘못된 비밀번호입니다.");
-        }
-
-        if (user.getIsDeleted()) {
-            throw new YogurtNoAuthException("탈퇴된 회원입니다.");
-        }
-
-        String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole());
-        return LoginResponse.of(jwtToken, user);
-    }
-
     public void logout(HttpServletRequest request) {
         String token = jwtTokenProvider.resolveToken(request);
         tokenBlacklistRepository.save(TokenBlacklist.of(token));
     }
 
     @Transactional
-    public User saveUser(SaveUserRequest saveUserRequest) {
-        boolean existsEmail = userService.existsByEmail(saveUserRequest.getEmail());
+    public LoginResponse loginWithEmail(EmailLoginRequest emailLoginRequest) {
+        User user = userService.getByEmail(emailLoginRequest.getEmail());
+
+        validatePassword(emailLoginRequest.getPassword(), user.getPassword());
+        user.validateDeletion();
+
+        String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), emailLoginRequest.getStudioId());
+        Studio studio = studioService.getById(emailLoginRequest.getStudioId());
+        return LoginResponse.of(jwtToken, user, studio);
+    }
+
+    @Override
+    public LoginResponse loginWithGoogle(SocialLoginRequest socialLoginRequest) {
+        GoogleOAuthResponse response = oauthService.requestGoogleOAuth(socialLoginRequest.getAccessToken());
+
+        User user = userService.getByEmail(response.getEmail());
+        user.validateDeletion();
+
+        String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), socialLoginRequest.getStudioId());
+        Studio studio = studioService.getById(socialLoginRequest.getStudioId());
+
+        return LoginResponse.of(jwtToken, user, studio);
+    }
+
+    @Override
+    public LoginResponse loginWithFacebook(SocialLoginRequest socialLoginRequest) {
+        FacebookOAuthResponse response = oauthService.requestFacebookOAuth(socialLoginRequest.getAccessToken());
+
+        User user = userService.getByEmail(response.getEmail());
+        user.validateDeletion();
+
+        String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), socialLoginRequest.getStudioId());
+        Studio studio = studioService.getById(socialLoginRequest.getStudioId());
+
+        return LoginResponse.of(jwtToken, user, studio);
+    }
+
+    private void validatePassword(String rawPassword, String encryptedPassword) {
+        boolean isSamePassword = cryptoService.compare(rawPassword, encryptedPassword);
+        if (!isSamePassword) {
+            throw new YogurtWrongPasswordException("잘못된 비밀번호입니다.");
+        }
+    }
+
+    @Transactional
+    public User signupWithEmail(EmailSignupRequest emailSignupRequest) {
+        this.validateEmailForSignup(emailSignupRequest.getEmail());
+        verificationService.verifyEmail(emailSignupRequest.getEmail(), emailSignupRequest.getVerificationCode(), VerificationType.VERIFICATION_TYPE.SIGNUP.name());
+
+        String encryptedPassword = cryptoService.encode(emailSignupRequest.getPassword());
+        User user = emailSignupRequest.toEntity(encryptedPassword);
+
+        User savedUser = userRepository.save(user);
+        authMailService.sendMailForSignup(savedUser);
+        return savedUser;
+    }
+
+    public void validateEmailForSignup(String email) {
+        boolean existsEmail = userService.existsByEmail(email);
         if (existsEmail) {
             throw new YogurtAlreadyDataUseException("이미 사용중인 이메일입니다.");
         }
-
-        verificationService.verifyEmail(saveUserRequest.getEmail(), saveUserRequest.getVerificationCode(), VerificationType.VERIFICATION_TYPE.SIGNUP.name());
-
-        String encryptedPassword = cryptoService.encode(saveUserRequest.getPassword());
-        User user = saveUserRequest.toEntity(encryptedPassword);
-
-        this.saveUserSendMail(user);
-
-        return userRepository.save(user);
     }
 
-    private void saveUserSendMail(User user) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", user.getName());
-        mailService.send("/signup-user", dataMap, user.getName(), user.getEmail());
+    @Transactional
+    public User signupWithGoogle(SocialSignupRequest socialSignupRequest) {
+        GoogleOAuthResponse response = oauthService.requestGoogleOAuth(socialSignupRequest.getAccessToken());
+        validateEmailForSignup(response.getEmail());
+
+        User user = response.toEntity();
+
+        User savedUser = userRepository.save(user);
+        authMailService.sendMailForSignup(savedUser);
+        return savedUser;
     }
+
+
+    @Transactional
+    public User signupWithFacebook(SocialSignupRequest socialSignupRequest) {
+        FacebookOAuthResponse response = oauthService.requestFacebookOAuth(socialSignupRequest.getAccessToken());
+        validateEmailForSignup(response.getEmail());
+
+        User user = response.toEntity();
+
+        User savedUser = userRepository.save(user);
+        authMailService.sendMailForSignup(savedUser);
+        return savedUser;
+    }
+
+//    @Transactional
+//    public User signupWithApple(AppleSignupRequest appleSignupRequest) {
+//        AppleSignupRequest response = oauthService.requestGoogleOAuth(appleSignupRequest.getAccessToken()))
+//        validateEmailForSignup(response.getEmail());
+//
+//        User user = response.toEntity();
+//
+//        User savedUser = userRepository.save(user);
+//        authMailService.sendMailForSignup(savedUser);
+//        return savedUser;
+//    }
 
     @Transactional
     public void findPassword(FindPasswordRequest findPasswordRequest) {

@@ -46,7 +46,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     @Transactional
     public Article updateByIdAndUser(Long id, User user, UpdateArticleRequest updateArticleRequest) {
-        Article article = this.getByIdAndStudioId(id, user.getStudioId());
+        Article article = this.getByIdAndStudioId(id, updateArticleRequest.getStudioId());
         article.setTitle(updateArticleRequest.getTitle());
         article.setContent(updateArticleRequest.getContent());
         return repository.save(article);

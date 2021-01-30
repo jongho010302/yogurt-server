@@ -9,6 +9,7 @@ public enum ErrorType implements InterfaceErrorType {
     DATE_PARSING("data.parsing"),
     DATA_NOT_EXISTS("data.not.exists"),
     DIFFERENT_VERIFY_CODE("different.verify.code"),
+    OAUTH("oauth"),
     ENTITY_NOT_FOUND("entity.not.found"),
     BOOKING_ENTRY_EXCEED("booking.entry.exceed"),
     BOOKING_TIME_EXCEED("booking.time.exceed"),

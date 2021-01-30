@@ -1,5 +1,6 @@
 package com.yogurt.api.lecture.controller.member;
 
+import com.yogurt.api.auth.domain.AuthContext;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.base.dto.Meta;
 import com.yogurt.api.lecture.domain.LectureBooking;
@@ -25,34 +26,34 @@ public class MemberLectureController {
     private final LectureService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAllWithFilter(@AuthenticationPrincipal User user,
+    public ResponseEntity<ApiResponse> getAllWithFilter(@AuthenticationPrincipal AuthContext authContext,
                                                         Pageable pageable,
                                                         @RequestParam(value = "start_at") String startAt,
                                                         @RequestParam(value = "end_at") String endAt,
                                                         @RequestParam(value = "week_day", required = false) String weekDay,
                                                         @RequestParam(value = "staff_id", required = false) Long staffId,
                                                         @RequestParam(value = "class_type", required = false) String classType) {
-        List<LectureItem> lectureItemList = service.getAllWithFilter(user.getStudioId(), pageable, startAt, endAt, weekDay, staffId, classType);
+        List<LectureItem> lectureItemList = service.getAllWithFilter(authContext.getStudioId(), pageable, startAt, endAt, weekDay, staffId, classType);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("수업 리스트입니다.", lectureItemList, Meta.of(pageable, lectureItemList.size())), HttpStatus.OK);
     }
 
     @GetMapping("/bookings")
-    public ResponseEntity<ApiResponse> getLectureBookingList(@AuthenticationPrincipal User user,
+    public ResponseEntity<ApiResponse> getLectureBookingList(@AuthenticationPrincipal AuthContext authContext,
                                               @RequestParam(required = false) Long userTicketId) {
-        List<LectureBooking> lectureBookingList = service.getBookingList(user, userTicketId);
+        List<LectureBooking> lectureBookingList = service.getBookingList(authContext.getUser(), userTicketId);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("예약 내역입니다.", lectureBookingList), HttpStatus.OK);
     }
 
     @PostMapping("/bookings")
-    public ResponseEntity<ApiResponse> bookLecture(@AuthenticationPrincipal User user, @RequestBody @Valid LectureBookingRequest lectureBookingRequest) {
-        LectureBooking lectureBooking = service.book(user.getId(), lectureBookingRequest.getLectureItemId(), lectureBookingRequest.getUserTicketId());
+    public ResponseEntity<ApiResponse> bookLecture(@AuthenticationPrincipal AuthContext authContext, @RequestBody @Valid LectureBookingRequest lectureBookingRequest) {
+        LectureBooking lectureBooking = service.book(authContext.getUser().getId(), lectureBookingRequest.getLectureItemId(), lectureBookingRequest.getUserTicketId());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("예약이 완료 되었습니다.", lectureBooking), HttpStatus.OK);
     }
 
     @DeleteMapping("/bookings/{id}")
-    public ResponseEntity<ApiResponse> cancelLecture(@AuthenticationPrincipal User user, @PathVariable Long id) {
-        service.cancel(user.getId(), id);
+    public ResponseEntity<ApiResponse> cancelLecture(@AuthenticationPrincipal AuthContext authContext, @PathVariable Long id) {
+        service.cancel(authContext.getUser().getId(), id);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("예약이 취소되었습니다."), HttpStatus.OK);
     }
 }

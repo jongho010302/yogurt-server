@@ -2,8 +2,11 @@ package com.yogurt.api.user.service;
 
 import com.yogurt.api.auth.service.VerificationService;
 import com.yogurt.api.mail.service.MailService;
+import com.yogurt.api.studio.domain.Studio;
+import com.yogurt.api.studio.service.StudioService;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.dto.common.ChangeEmailRequest;
+import com.yogurt.api.user.dto.common.CheckResponse;
 import com.yogurt.api.user.infra.UserRepository;
 import com.yogurt.base.crypto.CryptoService;
 import com.yogurt.base.exception.YogurtDataNotExistsException;
@@ -14,6 +17,7 @@ import com.yogurt.base.util.DateUtils;
 import com.yogurt.file.S3Uploader;
 import com.yogurt.generic.user.domain.Email;
 import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.generic.user.domain.UserRole;
 import com.yogurt.generic.user.domain.VerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +34,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final MailService mailService;
+    private final StudioService studioService;
 
     private final CryptoService cryptoService;
 
@@ -40,14 +44,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
+    private final UserMailService mailService;
+
     @Transactional
     public User getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new YogurtDataNotExistsException("존재하지 않는 유저입니다."));
     }
 
     @Transactional
-    public User checkUser(User user) {
-        return this.getById(user.getId());
+    public CheckResponse checkUser(User user, long studioId) {
+        Studio studio = studioService.getById(studioId);
+        return CheckResponse.of(user, studio);
     }
 
     @Transactional
@@ -83,14 +90,8 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(cryptoService.encode(password));
         User updatedUser = repository.save(user);
-        changePasswordSendMail(updatedUser);
+        mailService.changePasswordSendMail(updatedUser);
         return updatedUser;
-    }
-
-    private void changePasswordSendMail(User user) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", user.getName());
-        mailService.send("/change-password", dataMap, user.getName(), user.getEmail());
     }
 
     @Transactional
@@ -106,26 +107,19 @@ public class UserServiceImpl implements UserService {
         verificationService.verifyEmail(changingEmail, changeEmailRequest.getVerificationCode(), VerificationType.VERIFICATION_TYPE.CHANGE_EMAIL.name());
         user.setEmail(Email.of(changingEmail));
         User updatedUser = repository.save(user);
-        changeEmailSendMail(user, originalEmail, changingEmail);
+        mailService.changeEmailSendMail(user, originalEmail, changingEmail);
 
         return updatedUser;
     }
 
-    private void changeEmailSendMail(User user, String originalEmail, String changedEmail) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", user.getName());
-        dataMap.put("originalEmail", originalEmail);
-        dataMap.put("changedEmail", changedEmail);
-        mailService.send("/change-email", dataMap, user.getName(), user.getEmail());
-    }
-
     @Transactional
-    public User changeRole(Long id, String role) {
+    public User changeRole(Long id, UserRole.RoleEnum role) {
         User user = this.getById(id);
         user.setRole(role);
         return repository.save(user);
     }
 
+    @Transactional
     public User delete(User user, String deleteReason) {
         user.deleted();
         user.setDeletedAt(DateUtils.getCurrentDate());
@@ -133,6 +127,7 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
+    @Transactional
     public User delete(Long id, String deleteReason) {
         User user = this.getById(id);
         return delete(user, deleteReason);

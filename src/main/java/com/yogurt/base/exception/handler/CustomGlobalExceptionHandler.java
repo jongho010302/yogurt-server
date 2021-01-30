@@ -34,6 +34,7 @@ public class CustomGlobalExceptionHandler {
             YogurtBookingTimeExceedException.class,
             YogurtBookingEntryExceedException.class,
             YogurtFileSizeException.class,
+            YogurtOAuthException.class,
             YogurtFileUploadException.class,
             YogurtInvalidFormatException.class,
             YogurtInvalidSameEmailException.class,

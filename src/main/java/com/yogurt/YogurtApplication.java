@@ -2,6 +2,7 @@ package com.yogurt;
 
 import com.yogurt.api.studio.domain.Studio;
 import com.yogurt.api.studio.infra.StudioRepository;
+import com.yogurt.api.user.domain.AuthType;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.infra.UserRepository;
 import com.yogurt.base.util.DateUtils;
@@ -45,13 +46,11 @@ public class YogurtApplication {
 
         if (!userRepository.findById(1L).isPresent()) {
             User user = User.builder()
-                    .studioId(1L)
                     .email(Email.of("jongho.dev@gmail.com"))
                     .password(passwordEncoder.encode("Wldms0302!"))
                     .name("jongho")
-                    .gender(Gender.of("M"))
-                    .birthday(Date.of("2001-03-02"))
-                    .role("ROLE_DEVELOPER")
+                    .role(UserRole.RoleEnum.ROLE_DEVELOPER)
+                    .authType(AuthType.Email)
                     .phone(Phone.of("010-7570-3529"))
                     .build();
             userRepository.save(user);

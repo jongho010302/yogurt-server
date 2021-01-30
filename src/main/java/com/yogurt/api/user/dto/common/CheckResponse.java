@@ -1,4 +1,4 @@
-package com.yogurt.api.auth.dto;
+package com.yogurt.api.user.dto.common;
 
 import com.yogurt.api.studio.domain.Studio;
 import com.yogurt.api.user.domain.User;
@@ -10,13 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class LoginResponse {
+public class CheckResponse {
 
-    private String accessToken;
     private User user;
     private Studio studio;
 
-    public static LoginResponse of(String jwtToken, User user, Studio studio) {
-        return new LoginResponse(jwtToken, user, studio);
+    public static CheckResponse of( User user, Studio studio) {
+        return new CheckResponse(user, studio);
     }
 }

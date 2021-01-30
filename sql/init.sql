@@ -1,14 +1,10 @@
-use yogurt;
+use yogurt_dev;
 
-DROP DATABASE yogurt;
+DROP DATABASE yogurt_dev;
 
-CREATE DATABASE yogurt DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE yogurt_dev DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-USE yogurt;
-
-INSERT INTO studio values (
-	1, now(), now(), '경기도 성남시', '종호로 2', '종호 스튜디오2', '2020-04-02', '031-123-1234'
-);
+USE yogurt_dev;
 
 SELECT * from verification v ;
 
@@ -20,4 +16,4 @@ update lecture_item set studio_id = 1;
 
 select * from lecture_lecture_items lli ;
 
-select * from lecture;
+select * from user;

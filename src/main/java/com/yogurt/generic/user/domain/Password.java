@@ -10,6 +10,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Password {
 
-    public static final String PATTERN = "^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+    public static final String PATTERN = "^(?=.*[a-zA-Z])((?=.*\\d)|(?=.*\\W)).{6,20}$";
     public static final String PATTERN_MESSAGE = "비밀번호의 형식을 맞춰 주세요.";
 }
