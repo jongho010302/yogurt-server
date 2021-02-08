@@ -28,10 +28,6 @@ public interface UserService {
 
     User getByEmail(String Email);
 
-    User delete(User user, String deleteReason);
-
-    User delete(Long id, String deleteReason);
-
     List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted);
 
     boolean existsByEmail(String email);

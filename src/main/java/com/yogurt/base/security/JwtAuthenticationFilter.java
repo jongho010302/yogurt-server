@@ -1,5 +1,6 @@
 package com.yogurt.base.security;
 
+import com.yogurt.api.auth.domain.AuthContext;
 import com.yogurt.api.auth.domain.TokenBlacklist;
 import com.yogurt.api.auth.domain.TokenBlacklistRepository;
 import com.yogurt.api.user.domain.User;
@@ -62,8 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        User user = (User) authentication.getPrincipal();
-        if (user.getIsDeleted()) {
+        AuthContext authContext = (AuthContext) authentication.getPrincipal();
+        if (authContext.getUser().getIsDeleted()) {
             ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("삭제된 유저의 인증 토큰입니다.");
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json");

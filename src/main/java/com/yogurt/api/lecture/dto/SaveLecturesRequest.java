@@ -69,9 +69,6 @@ public class SaveLecturesRequest {
     private List<LectureSchedule> schedules;
 
     public Lecture toLectureEntity() {
-        Staff staff = new Staff();
-        staff.setId(staffId);
-
         return Lecture.builder()
                 .studioId(studioId)
                 .staffId(staffId)
@@ -93,7 +90,7 @@ public class SaveLecturesRequest {
         return LectureItem.builder()
                 .studioId(studioId)
                 .lecture(lecture)
-                .staff(staff)
+                .staffId(staffId)
                 .title(title)
                 .description(description)
                 .maxTrainee(maxTrainee)

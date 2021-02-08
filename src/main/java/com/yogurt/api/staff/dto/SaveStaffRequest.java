@@ -1,5 +1,6 @@
 package com.yogurt.api.staff.dto;
 
+import com.yogurt.api.user.domain.AuthType;
 import com.yogurt.generic.user.domain.Date;
 import com.yogurt.generic.user.domain.Email;
 import com.yogurt.generic.user.domain.Phone;
@@ -42,8 +43,8 @@ public class SaveStaffRequest {
     private String profileUrl;
 
     @UserRoleValid
-    @NotEmpty(message = "직급은 필수 값입니다.")
-    private UserRole.RoleEnum role;
+    @NotEmpty(message = "직무는 필수 값입니다.")
+    private String role;
 
     @NotEmpty(message = "자기소개는 필수 값입니다.")
     private String selfIntroduce;
@@ -58,12 +59,12 @@ public class SaveStaffRequest {
     public Staff toEntity(String password) {
         User user = User.builder()
                 .email(Email.of(email))
+                .authType(AuthType.Email)
                 .password(password)
-                .name(name)
                 .name(name)
                 .phone(Phone.of(phone))
                 .profileUrl(profileUrl)
-                .role(role)
+                .role(UserRole.RoleEnum.valueOf(role))
                 .build();
 
         List<StaffSchedule> staffScheduleList = new ArrayList<>();

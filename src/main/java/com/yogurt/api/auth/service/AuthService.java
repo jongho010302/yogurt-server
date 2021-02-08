@@ -27,5 +27,5 @@ public interface AuthService {
 
     void findPassword(FindPasswordRequest findPasswordRequest);
 
-    String getRandomPassword();
+    void deleteUser(long userId);
 }

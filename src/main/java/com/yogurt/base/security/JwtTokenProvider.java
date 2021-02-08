@@ -62,7 +62,8 @@ public class JwtTokenProvider {
     }
 
     private long getStudioIdFromToken(String token) {
-        return (long) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("studioId");
+        Integer studioId = (Integer) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("studioId");
+        return studioId.longValue();
     }
 
     public String resolveToken(HttpServletRequest request) {

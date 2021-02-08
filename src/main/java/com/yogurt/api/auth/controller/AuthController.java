@@ -4,7 +4,6 @@ import com.yogurt.api.auth.domain.AuthContext;
 import com.yogurt.api.auth.dto.*;
 import com.yogurt.api.auth.service.AuthService;
 import com.yogurt.api.auth.service.VerificationService;
-import com.yogurt.api.user.dto.common.DeleteUserRequest;
 import com.yogurt.api.user.service.UserService;
 import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.api.user.domain.User;
@@ -128,8 +127,8 @@ public class AuthController {
     }
 
     @DeleteMapping("/users")
-    public ResponseEntity<ApiResponse> deleteAccount(@AuthenticationPrincipal AuthContext authContext, @RequestBody @Valid DeleteUserRequest deleteUserRequest) {
-        userService.delete(authContext.getUser().getId(), deleteUserRequest.getDeleteReason());
+    public ResponseEntity<ApiResponse> deleteAccount(@AuthenticationPrincipal AuthContext authContext) {
+        authService.deleteUser(authContext.getUser().getId());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원 탈퇴되었습니다."), HttpStatus.CREATED);
     }
 

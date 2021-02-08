@@ -53,7 +53,7 @@ public class LectureItemRepositoryImpl extends QuerydslRepositorySupport impleme
         if (StringUtils.isEmpty(staffId)) {
             return null;
         }
-        return lectureItem.staff.id.eq(staffId);
+        return lectureItem.staffId.eq(staffId);
     }
 
     private BooleanExpression eqClassType(String classType) {

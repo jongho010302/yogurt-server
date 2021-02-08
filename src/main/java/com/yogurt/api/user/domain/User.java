@@ -2,6 +2,7 @@ package com.yogurt.api.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yogurt.api.studio.domain.Studio;
 import com.yogurt.base.exception.YogurtNoAuthException;
 import com.yogurt.generic.base.BaseEntity;
 import com.yogurt.generic.user.domain.Email;
@@ -10,6 +11,8 @@ import com.yogurt.generic.user.domain.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +21,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseEntity {
+
+    @Builder.Default
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Studio> studios = new ArrayList<>();
 
     private Email email;
 
@@ -40,9 +47,6 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private UserRole.RoleEnum role;
-
-    @Column
-    private String deleteReason;
 
     @Transient
     private String displayRole;
@@ -78,5 +82,4 @@ public class User extends BaseEntity {
             throw new YogurtNoAuthException("탈퇴된 회원입니다.");
         }
     }
-
 }

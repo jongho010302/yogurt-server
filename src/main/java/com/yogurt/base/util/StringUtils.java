@@ -10,4 +10,8 @@ public class StringUtils {
     public static String getUUID(int length) {
         return UUID.randomUUID().toString().substring(0, length);
     }
+
+    public static String getRandomPassword() {
+        return StringUtils.getUUID(12).replaceAll("-", "") + "A!";
+    }
 }

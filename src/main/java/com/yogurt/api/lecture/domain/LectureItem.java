@@ -28,8 +28,8 @@ public class LectureItem extends BaseEntity {
     @ManyToOne
     private Lecture lecture;
 
-    @ManyToOne
-    private Staff staff;
+    @Column(nullable = false)
+    private Long staffId;
 
     // 수업명
     @Column(nullable = false)

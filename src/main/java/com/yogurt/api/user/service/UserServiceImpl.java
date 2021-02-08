@@ -119,20 +119,6 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-    @Transactional
-    public User delete(User user, String deleteReason) {
-        user.deleted();
-        user.setDeletedAt(DateUtils.getCurrentDate());
-        user.setDeleteReason(deleteReason);
-        return repository.save(user);
-    }
-
-    @Transactional
-    public User delete(Long id, String deleteReason) {
-        User user = this.getById(id);
-        return delete(user, deleteReason);
-    }
-
     public User getByEmail(String email) {
         User user = repository.findByEmail(Email.of(email)).orElseThrow(() -> new YogurtEntityNotFountException("해당 이메일로 등록된 유저가 없습니다."));
         return user;

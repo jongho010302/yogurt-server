@@ -1,6 +1,7 @@
 package com.yogurt.api.staff.service;
 
 import com.yogurt.api.auth.service.AuthService;
+import com.yogurt.api.user.infra.UserRepository;
 import com.yogurt.base.crypto.CryptoService;
 import com.yogurt.base.exception.YogurtAlreadyDataExistsException;
 import com.yogurt.base.exception.YogurtAlreadyDataUseException;
@@ -12,6 +13,7 @@ import com.yogurt.api.staff.infra.StaffRepository;
 import com.yogurt.api.user.domain.User;
 import com.yogurt.api.user.service.UserService;
 import com.yogurt.base.util.DateUtils;
+import com.yogurt.base.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import java.util.Map;
 @Service
 public class StaffServiceImpl implements StaffService {
 
-    private final AuthService authService;
+    private final UserRepository userRepository;
 
     private final UserService userService;
 
@@ -34,21 +36,21 @@ public class StaffServiceImpl implements StaffService {
 
     private final MailService mailService;
 
-    private final StaffRepository repository;
+    private final StaffRepository staffRepository;
 
     @Transactional
     public Staff getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new YogurtDataNotExistsException("존재 하지 않는 직원입니다."));
+        return staffRepository.findById(id).orElseThrow(() -> new YogurtDataNotExistsException("존재 하지 않는 직원입니다."));
     }
 
     @Transactional
     public Staff getByUser(User user) {
-        return repository.findByUser(user).orElseThrow(() -> new YogurtDataNotExistsException("존재 하지 않는 직원입니다."));
+        return staffRepository.findByUser(user).orElseThrow(() -> new YogurtDataNotExistsException("존재 하지 않는 직원입니다."));
     }
 
     @Transactional
     public List<Staff> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
-        return repository.getAllWithFilter(pageable, isDeleted);
+        return staffRepository.getAllWithFilter(pageable, isDeleted);
     }
 
     @Transactional
@@ -57,11 +59,11 @@ public class StaffServiceImpl implements StaffService {
             throw new YogurtAlreadyDataUseException("이미 사용중인 이메일입니다.");
         }
 
-        String randomPassword = authService.getRandomPassword();
+        String randomPassword = StringUtils.getRandomPassword();
         String encryptedPassword = cryptoService.encode(randomPassword);
         Staff staffEntity = saveStaffRequest.toEntity(encryptedPassword);
 
-        Staff staff = repository.save(staffEntity);
+        Staff staff = staffRepository.save(staffEntity);
 
         staffSignupSendMail(staff, randomPassword);
 
@@ -71,14 +73,13 @@ public class StaffServiceImpl implements StaffService {
     @Transactional
     public void delete(Long id) {
         Staff staff = this.getById(id);
-        if (staff.getIsDeleted()) {
-            throw new YogurtAlreadyDataExistsException("이미 삭제된 직원입니다.");
-        }
-        staff.deleted();
-        staff.setDeletedAt(DateUtils.getCurrentDate());
 
-        userService.delete(staff.getUser(), "from admin page");
-        repository.save(staff);
+        this.deleteUser(staff.getUser().getId());
+        staffRepository.deleteById(id);
+    }
+
+    private void deleteUser(long userId) {
+        userRepository.deleteById(userId);
     }
 
     private void staffSignupSendMail(Staff staff, String randomPassword) {
@@ -92,7 +93,7 @@ public class StaffServiceImpl implements StaffService {
     public void resetPassword(long userId) {
         User user = userService.getById(userId);
 
-        String randomPassword = authService.getRandomPassword();
+        String randomPassword = StringUtils.getRandomPassword();
         userService.changePassword(userId, randomPassword);
 
         resetPasswordSendMail(user, randomPassword);
@@ -107,6 +108,6 @@ public class StaffServiceImpl implements StaffService {
 
     @Transactional
     public boolean existsById(Long id) {
-        return repository.existsById(id);
+        return staffRepository.existsById(id);
     }
 }

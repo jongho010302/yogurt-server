@@ -57,7 +57,6 @@ public class AuthServiceImpl implements AuthService {
         User user = userService.getByEmail(emailLoginRequest.getEmail());
 
         validatePassword(emailLoginRequest.getPassword(), user.getPassword());
-        user.validateDeletion();
 
         String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), emailLoginRequest.getStudioId());
         Studio studio = studioService.getById(emailLoginRequest.getStudioId());
@@ -69,7 +68,6 @@ public class AuthServiceImpl implements AuthService {
         GoogleOAuthResponse response = oauthService.requestGoogleOAuth(socialLoginRequest.getAccessToken());
 
         User user = userService.getByEmail(response.getEmail());
-        user.validateDeletion();
 
         String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), socialLoginRequest.getStudioId());
         Studio studio = studioService.getById(socialLoginRequest.getStudioId());
@@ -82,7 +80,6 @@ public class AuthServiceImpl implements AuthService {
         FacebookOAuthResponse response = oauthService.requestFacebookOAuth(socialLoginRequest.getAccessToken());
 
         User user = userService.getByEmail(response.getEmail());
-        user.validateDeletion();
 
         String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString(), socialLoginRequest.getStudioId());
         Studio studio = studioService.getById(socialLoginRequest.getStudioId());
@@ -166,7 +163,8 @@ public class AuthServiceImpl implements AuthService {
         userService.changePassword(user.getId(), password);
     }
 
-    public String getRandomPassword() {
-        return StringUtils.getUUID(12).replaceAll("-", "") + "A!";
+    @Transactional
+    public void deleteUser(long userId) {
+        userRepository.deleteById(userId);
     }
 }
