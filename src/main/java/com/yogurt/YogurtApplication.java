@@ -44,7 +44,7 @@ public class YogurtApplication {
             log.info("Yogurt: Studio was created.");
         }
 
-        if (!userRepository.findById(1L).isPresent()) {
+        if (!userRepository.findByEmail(Email.of("jongho.dev@gmail.com")).isPresent()) {
             User user = User.builder()
                     .email(Email.of("jongho.dev@gmail.com"))
                     .password(passwordEncoder.encode("Wldms0302!"))

@@ -1,12 +1,19 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.0.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.4.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java'
 }
 
+//plugins {
+//    id 'org.springframework.boot' version '2.3.0.RELEASE'
+//    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+//    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+//    id 'java'
+//}
+
 group = 'com.yogurt'
-version = '0.1'
+version = '0.0.1'
 
 dependencyManagement {
     imports {
@@ -40,12 +47,15 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
-//    runtimeOnly 'mysql:mysql-connector-java:8.0.19'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.1'
     testImplementation 'io.rest-assured:spring-mock-mvc:3.0.0'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 //querydsl 추가 시작
