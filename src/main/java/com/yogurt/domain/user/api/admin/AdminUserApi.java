@@ -1,7 +1,8 @@
 package com.yogurt.domain.user.api.admin;
 
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.dto.admin.ChangeRoleRequest;
+import com.yogurt.domain.user.dto.admin.request.ChangeRoleRequest;
+import com.yogurt.domain.user.dto.admin.response.UsersResponse;
 import com.yogurt.domain.user.service.admin.AdminUserService;
 import com.yogurt.global.common.response.ApiResponse;
 import com.yogurt.global.common.response.Meta;
@@ -23,7 +24,7 @@ public class AdminUserApi {
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(Pageable pageable) {
-        List<User> userList = service.getAllWithFilter(pageable);
+        List<UsersResponse> userList = service.getAllWithFilter(pageable);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("유저 리스트입니다.", userList, Meta.of(pageable, userList.size())), HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package com.yogurt.domain.user.service.admin;
 
 import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.user.domain.User;
+import com.yogurt.domain.user.dto.admin.response.UsersResponse;
 import com.yogurt.domain.user.infra.admin.AdminUserRepository;
 import com.yogurt.domain.user.service.common.CommonUserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         return commonUserService.getById(id);
     }
 
-    public List<User> getAllWithFilter(Pageable pageable) {
+    public List<UsersResponse> getAllWithFilter(Pageable pageable) {
         return repository.getAllWithFilter(pageable);
     }
 

@@ -2,7 +2,11 @@ package com.yogurt.domain.user.api.base;
 
 import com.yogurt.domain.auth.domain.AuthContext;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.dto.common.*;
+import com.yogurt.domain.user.dto.common.request.ChangeEmailRequest;
+import com.yogurt.domain.user.dto.common.request.ChangeNameRequest;
+import com.yogurt.domain.user.dto.common.request.ChangePasswordRequest;
+import com.yogurt.domain.user.dto.common.request.ChangePhoneRequest;
+import com.yogurt.domain.user.dto.common.response.CheckResponse;
 import com.yogurt.domain.user.service.base.BaseUserService;
 import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

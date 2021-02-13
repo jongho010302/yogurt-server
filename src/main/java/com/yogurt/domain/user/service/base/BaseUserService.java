@@ -2,8 +2,8 @@ package com.yogurt.domain.user.service.base;
 
 import com.yogurt.domain.auth.domain.AuthContext;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.dto.common.ChangeEmailRequest;
-import com.yogurt.domain.user.dto.common.CheckResponse;
+import com.yogurt.domain.user.dto.common.request.ChangeEmailRequest;
+import com.yogurt.domain.user.dto.common.response.CheckResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BaseUserService {

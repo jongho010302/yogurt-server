@@ -1,57 +1,39 @@
-package com.yogurt.domain.user.domain;
+package com.yogurt.domain.user.dto.admin.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yogurt.domain.base.entity.BaseEntity;
 import com.yogurt.domain.base.model.Email;
 import com.yogurt.domain.base.model.Phone;
 import com.yogurt.domain.base.model.UserRole;
-import lombok.*;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.yogurt.domain.user.domain.AuthType;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class User extends BaseEntity {
-
-    @ElementCollection
-    @Builder.Default
-    private List<Long> studioIds = new ArrayList<>();
+public class UsersResponse {
 
     private Email email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column
-    private String password;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private AuthType authType;
 
-    @Column(nullable = false)
     private String name;
 
     private Phone phone;
 
-    @Column
     private String profileUrl;
 
-    @Column(nullable = false)
+    @JsonIgnore
     private UserRole.RoleEnum role;
 
-    public String getPhone() {
-        return phone.getPhone();
-    }
+    private String ticketTitle;
 
-    public String getEmail() {
-        return email.getEmail();
-    }
+    private String maxCoupon;
+
+    private String remainingCoupon;
+
+    private String startDate;
+
+    private String endDate;
 
     public String getDisplayRole() {
         String displayRole;
@@ -69,5 +51,23 @@ public class User extends BaseEntity {
             displayRole = "UNKNOWN ROLE";
         }
         return displayRole;
+    }
+
+    public String getPhone() {
+        return phone.getPhone();
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public UsersResponse(Email email, AuthType authType, String name, Phone phone, String profileUrl, UserRole.RoleEnum role,
+        String title, String maxCoupon, String remainingCoupon, String remainingCoupon, String startDate, String endDate) {
+        this.email = email;
+        this.authType = authType;
+        this.name = name;
+        this.phone = phone;
+        this.profileUrl = profileUrl;
+        this.role = role;
     }
 }

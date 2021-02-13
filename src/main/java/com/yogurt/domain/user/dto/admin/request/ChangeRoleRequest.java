@@ -1,4 +1,4 @@
-package com.yogurt.domain.user.dto.admin;
+package com.yogurt.domain.user.dto.admin.request;
 
 import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.validation.annotation.UserRoleValid;

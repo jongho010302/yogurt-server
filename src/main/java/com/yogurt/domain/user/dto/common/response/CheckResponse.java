@@ -1,4 +1,4 @@
-package com.yogurt.domain.user.dto.common;
+package com.yogurt.domain.user.dto.common.response;
 
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.user.domain.User;

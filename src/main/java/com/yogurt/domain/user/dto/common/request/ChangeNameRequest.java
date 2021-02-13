@@ -1,4 +1,4 @@
-package com.yogurt.domain.user.dto.common;
+package com.yogurt.domain.user.dto.common.request;
 
 import lombok.Getter;
 import lombok.Setter;
