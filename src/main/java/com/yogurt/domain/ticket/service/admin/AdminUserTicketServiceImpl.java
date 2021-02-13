@@ -7,10 +7,13 @@ import com.yogurt.domain.ticket.infra.admin.AdminUserTicketRepository;
 import com.yogurt.domain.ticket.service.common.CommonUserTicketService;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.service.common.CommonUserService;
+import com.yogurt.util.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +33,12 @@ public class AdminUserTicketServiceImpl implements AdminUserTicketService {
     }
 
     @Transactional
-    public UserTicket create(UserTicket userTicket) {
-        return commonUserTicketService.create(userTicket);
+    public UserTicket create(SaveUserTicketRequest saveUserTicketRequest) {
+        User user = commonUserService.getById(saveUserTicketRequest.getUserId());
+        Ticket ticket = adminTicketService.getById(saveUserTicketRequest.getTicketId());
+
+        UserTicket userTicket = saveUserTicketRequest.toEntity(user, ticket);
+        return repository.save(userTicket);
     }
 
     @Transactional
@@ -45,11 +52,8 @@ public class AdminUserTicketServiceImpl implements AdminUserTicketService {
     }
 
     @Transactional
-    public UserTicket saveUserTicket(SaveUserTicketRequest saveUserTicketRequest) {
-        User user = commonUserService.getById(saveUserTicketRequest.getUserId());
-        Ticket ticket = adminTicketService.getById(saveUserTicketRequest.getTicketId());
-
-        UserTicket userTicket = saveUserTicketRequest.toEntity(user, ticket);
-        return repository.save(userTicket);
+    public List<UserTicket> getAllByUser(Long userId) {
+        Date currentDate = DateUtils.getCurrentDate();
+        return repository.findByUserIdAndEndDateGreaterThanEqual(userId, currentDate);
     }
 }

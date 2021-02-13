@@ -26,7 +26,7 @@ public class AdminUserTicketApi {
 
     @PostMapping("")
     public ResponseEntity<ApiResponse> saveUserTicket(@RequestBody @Valid SaveUserTicketRequest saveUserTicketRequest) {
-        UserTicket userTicket = service.saveUserTicket(saveUserTicketRequest);
+        UserTicket userTicket = service.create(saveUserTicketRequest);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원에게 수강권이 저장되었습니다.", userTicket), HttpStatus.OK);
     }
 

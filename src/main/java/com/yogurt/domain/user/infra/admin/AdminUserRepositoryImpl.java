@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.yogurt.domain.ticket.domain.QUserTicket.userTicket;
 import static com.yogurt.domain.user.domain.QUser.user;
 
 @Repository
@@ -30,20 +29,16 @@ public class AdminUserRepositoryImpl extends QuerydslRepositorySupport implement
     public List<UsersResponse> getAllWithFilter(Pageable pageable) {
         JPAQuery<UsersResponse> query = queryFactory
                 .select(Projections.constructor(UsersResponse.class,
+                        user.id,
                         user.email,
                         user.authType,
                         user.name,
                         user.phone,
                         user.profileUrl,
                         user.role,
-                        userTicket.ticket.title,
-                        userTicket.maxCoupon,
-                        userTicket.remainingCoupon,
-                        userTicket.startDate,
-                        userTicket.endDate
+                        user.createdAt
                         ))
-                .from(user)
-                .join(userTicket).on(userTicket.user.eq(user));
+                .from(user);
 
         QueryResults<UsersResponse> result = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetchResults();

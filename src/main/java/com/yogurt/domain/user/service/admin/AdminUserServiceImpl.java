@@ -1,6 +1,11 @@
 package com.yogurt.domain.user.service.admin;
 
 import com.yogurt.domain.base.model.UserRole;
+import com.yogurt.domain.ticket.domain.UserTicket;
+import com.yogurt.domain.ticket.service.admin.AdminTicketService;
+import com.yogurt.domain.ticket.service.admin.AdminUserTicketService;
+import com.yogurt.domain.ticket.service.common.CommonTicketService;
+import com.yogurt.domain.ticket.service.common.CommonUserTicketService;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.dto.admin.response.UsersResponse;
 import com.yogurt.domain.user.infra.admin.AdminUserRepository;
@@ -20,13 +25,25 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     private final AdminUserRepository repository;
 
+    private final CommonTicketService commonTicketService;
+
+    private final AdminUserTicketService adminUserTicketService;
+
     @Transactional
     public User getById(Long id) {
         return commonUserService.getById(id);
     }
 
+    @Transactional
     public List<UsersResponse> getAllWithFilter(Pageable pageable) {
-        return repository.getAllWithFilter(pageable);
+        List<UsersResponse> usersResponse = repository.getAllWithFilter(pageable);
+        usersResponse.stream()
+                .forEach(el -> {
+                    List<UserTicket> userTicket = adminUserTicketService.getAllByUser(el.getId());
+                    el.addUserTickets(userTicket);
+                });
+
+        return usersResponse;
     }
 
     @Transactional
