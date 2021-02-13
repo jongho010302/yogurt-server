@@ -5,7 +5,7 @@ import com.yogurt.domain.auth.service.VerificationService;
 import com.yogurt.domain.base.model.Email;
 import com.yogurt.domain.base.model.Phone;
 import com.yogurt.domain.base.model.VerificationType;
-import com.yogurt.domain.file.S3Uploader;
+import com.yogurt.file.S3Uploader;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.studio.service.common.CommonStudioService;
 import com.yogurt.domain.user.domain.User;

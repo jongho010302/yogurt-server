@@ -9,5 +9,4 @@ import java.util.Date;
 import java.util.List;
 
 public interface MemberTicketRepository extends JpaRepository<Ticket, Long> {
-    List<UserTicket> findByUserAndEndDateGreaterThanEqual(User user, Date date);
 }

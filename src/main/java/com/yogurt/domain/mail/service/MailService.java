@@ -1,6 +1,6 @@
 package com.yogurt.domain.mail.service;
 
-import com.yogurt.domain.file.FileService;
+import com.yogurt.file.FileService;
 import com.yogurt.domain.mail.domain.Mail;
 import com.yogurt.domain.mail.infra.MailRepository;
 import lombok.RequiredArgsConstructor;
