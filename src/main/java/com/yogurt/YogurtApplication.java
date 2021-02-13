@@ -1,11 +1,10 @@
 package com.yogurt;
 
-import com.yogurt.api.studio.domain.Studio;
-import com.yogurt.api.studio.infra.StudioRepository;
-import com.yogurt.api.user.domain.AuthType;
-import com.yogurt.api.user.domain.User;
-import com.yogurt.api.user.infra.UserRepository;
-import com.yogurt.base.util.DateUtils;
+import com.yogurt.domain.studio.domain.Studio;
+import com.yogurt.domain.studio.infra.StudioRepository;
+import com.yogurt.domain.user.domain.AuthType;
+import com.yogurt.domain.user.domain.User;
+import com.yogurt.domain.user.infra.UserRepository;
 import com.yogurt.generic.user.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

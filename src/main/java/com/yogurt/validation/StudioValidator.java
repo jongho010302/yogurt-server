@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.api.studio.service.StudioService;
+import com.yogurt.domain.studio.service.admin.AdminStudioService;
 import com.yogurt.validation.annotation.StudioValid;
 import lombok.RequiredArgsConstructor;
 
@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 @RequiredArgsConstructor
 public class StudioValidator implements ConstraintValidator<StudioValid, Long> {
 
-    private final StudioService service;
+    private final AdminStudioService service;
 
     @Override
     public boolean isValid(Long id, ConstraintValidatorContext context) {

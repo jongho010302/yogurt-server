@@ -1,9 +1,8 @@
 package com.yogurt.base.security;
 
-import com.yogurt.api.auth.domain.AuthContext;
-import com.yogurt.api.user.domain.User;
+import com.yogurt.domain.auth.domain.AuthContext;
+import com.yogurt.domain.user.domain.User;
 import com.yogurt.base.util.DateUtils;
-import com.yogurt.generic.user.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

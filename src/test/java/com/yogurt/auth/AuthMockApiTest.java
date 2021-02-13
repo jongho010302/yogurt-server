@@ -1,11 +1,9 @@
 package com.yogurt.auth;
 
-import com.yogurt.api.auth.controller.AuthController;
-import com.yogurt.generic.user.domain.Email;
+import com.yogurt.domain.auth.api.AuthApi;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(AuthApi.class)
 public class AuthMockApiTest {
 
 //    private signup_invalid_email() throws Exception {
