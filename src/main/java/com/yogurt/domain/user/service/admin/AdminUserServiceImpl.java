@@ -1,9 +1,9 @@
 package com.yogurt.domain.user.service.admin;
 
+import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.infra.UserRepository;
+import com.yogurt.domain.user.infra.admin.AdminUserRepository;
 import com.yogurt.domain.user.service.common.CommonUserService;
-import com.yogurt.generic.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     private final CommonUserService commonUserService;
 
-    private final UserRepository repository;
+    private final AdminUserRepository repository;
 
     @Transactional
     public User getById(Long id) {
         return commonUserService.getById(id);
     }
 
-    public List<User> getAllWithFilter(Pageable pageable, Boolean isDeleted) {
-        return repository.getAllWithFilter(pageable, isDeleted);
+    public List<User> getAllWithFilter(Pageable pageable) {
+        return repository.getAllWithFilter(pageable);
     }
 
     @Transactional

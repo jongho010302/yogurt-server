@@ -2,10 +2,14 @@ package com.yogurt.domain.lecture.service.member;
 
 import com.yogurt.domain.lecture.domain.LectureBooking;
 import com.yogurt.domain.lecture.domain.LectureItem;
+import com.yogurt.domain.lecture.exception.AlreadyBookException;
+import com.yogurt.domain.lecture.exception.BookingEntryExceedException;
+import com.yogurt.domain.lecture.exception.LectureBookingNotFoundException;
+import com.yogurt.domain.lecture.exception.LectureItemNotFoundException;
 import com.yogurt.domain.lecture.infra.member.MemberLectureBookingRepository;
 import com.yogurt.domain.lecture.infra.member.MemberLectureItemRepository;
 import com.yogurt.domain.ticket.domain.UserTicket;
-import com.yogurt.domain.ticket.service.admin.AdminUserTicketService;
+import com.yogurt.domain.ticket.service.member.MemberUserTicketService;
 import com.yogurt.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +65,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
     }
 
     private LectureItem getLectureItemById(Long id) {
-        return memberLectureItemRepository.findById(id).orElseThrow(() -> new YogurtDataNotExistsException("강의를 찾을 수 없습니다."));
+        return memberLectureItemRepository.findById(id).orElseThrow(() -> new LectureItemNotFoundException(id));
     }
 
     private void validateBooking(Long userId, LectureItem lectureItem) {
@@ -78,7 +82,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
             }
         }
         if (bookedCount >= lectureItem.getMaxTrainee()) {
-            throw new YogurtBookingEntryExceedException("예약 가능 정원을 초과했습니다. 다시 이용해주세요.");
+            throw new BookingEntryExceedException();
         }
     }
 
@@ -87,7 +91,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
             if (!lectureBooking.getIsCanceled()) {
                 boolean isUserBooked = lectureBooking.getUserTicket().getUser().getId().equals(userId);
                 if (isUserBooked) {
-                    throw new YogurtAlreadyBookedException("회원님은 이미 해당 강좌에 예약을 하셨습니다.");
+                    throw new AlreadyBookException();
                 }
             }
         }
@@ -105,13 +109,13 @@ public class MemberLectureServiceImpl implements MemberLectureService {
         lectureItem.validateExceedLectureCancelTime();
 
         userTicket.canceled();
-        userTicketService.save(userTicket);
+        userTicketService.create(userTicket);
 
         lectureBooking.canceled();
         return memberLectureBookingRepository.save(lectureBooking);
     }
 
     private LectureBooking getLectureBookingById(Long id) {
-        return memberLectureBookingRepository.findById(id).orElseThrow(() -> new YogurtDataNotExistsException("강의를 찾을 수 없습니다."));
+        return memberLectureBookingRepository.findById(id).orElseThrow(() -> new LectureBookingNotFoundException(id));
     }
 }

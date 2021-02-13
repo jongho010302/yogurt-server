@@ -1,10 +1,10 @@
 package com.yogurt.domain.ticket.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.base.dto.Meta;
 import com.yogurt.domain.ticket.domain.Ticket;
 import com.yogurt.domain.ticket.dto.admin.SaveTicketRequest;
 import com.yogurt.domain.ticket.service.admin.AdminTicketService;
+import com.yogurt.global.common.response.ApiResponse;
+import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

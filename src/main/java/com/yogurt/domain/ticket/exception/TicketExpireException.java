@@ -6,6 +6,6 @@ import com.yogurt.global.error.exception.ErrorCode;
 public class TicketExpireException extends BusinessException {
 
     public TicketExpireException() {
-        super(ErrorCode.COUPON_EXPIRE);
+        super(ErrorCode.TICKET_EXPIRE);
     }
 }

@@ -1,11 +1,10 @@
 package com.yogurt.domain.user.api.base;
 
 import com.yogurt.domain.auth.domain.AuthContext;
-import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.dto.common.*;
 import com.yogurt.domain.user.service.base.BaseUserService;
-import com.yogurt.domain.user.service.common.CommonUserService;
+import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

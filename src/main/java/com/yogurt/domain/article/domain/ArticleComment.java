@@ -1,7 +1,7 @@
 package com.yogurt.domain.article.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.domain.base.entity.BaseEntity;
 import com.yogurt.domain.user.domain.User;
 import lombok.*;
 

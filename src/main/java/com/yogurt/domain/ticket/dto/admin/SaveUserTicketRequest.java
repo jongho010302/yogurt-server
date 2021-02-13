@@ -3,7 +3,7 @@ package com.yogurt.domain.ticket.dto.admin;
 import com.yogurt.domain.ticket.domain.Ticket;
 import com.yogurt.domain.ticket.domain.UserTicket;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.base.util.DateUtils;
+import com.yogurt.util.DateUtils;
 import com.yogurt.validation.annotation.DateValid;
 import com.yogurt.validation.annotation.TicketValid;
 import com.yogurt.validation.annotation.UserValid;

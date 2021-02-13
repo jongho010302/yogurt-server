@@ -1,8 +1,8 @@
 package com.yogurt.domain.auth.domain;
 
-import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.VerificationType;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.VerificationType;
 import lombok.*;
 
 import javax.persistence.AttributeOverride;

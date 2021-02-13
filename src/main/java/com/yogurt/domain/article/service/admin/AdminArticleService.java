@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AdminArticleService {
 
-    List<Article> getByFilter(Pageable pageable, Long studioId, Boolean isDeleted);
+    List<Article> getByFilter(Pageable pageable, Long studioId);
 
     Article getByIdAndStudioId(Long id, Long studioId);
 

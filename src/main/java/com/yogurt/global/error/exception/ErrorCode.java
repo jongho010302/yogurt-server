@@ -14,18 +14,33 @@ public enum ErrorCode {
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
     // Auth
-    EMAIL_ALREADY_REGISTERED(400, "M001", "Email is already registered"),
-    CODE_NOT_SENT(400, "M002", "Verification code isn't sent"),
-    CODE_TIMEOUT(400, "M003", "Verification exceed timeout"),
-    CODE_DIFFERENT(400, "M004", "Verification code different"),
-    WRONG_PASSWORD(400, "M005", "Verification code different"),
+    EMAIL_ALREADY_REGISTERED(400, "A001", "Email is already registered"),
+    CODE_NOT_SENT(400, "A002", "Verification code isn't sent"),
+    CODE_TIMEOUT(400, "A003", "Verification exceed timeout"),
+    CODE_DIFFERENT(400, "A004", "Verification code different"),
+    WRONG_PASSWORD(400, "A005", "Verification code different"),
+    OAUTH(400, "A006", "OAuth error occurred"),
 
-    // Coupon
-    COUPON_ALREADY_USE(400, "CO001", "Coupon was already used"),
-    COUPON_EXPIRE(400, "CO002", "Coupon was already expired"),
+    // Ticket
+    TICKET_EXPIRE(400, "TO01", "Ticket was already expired"),
+    BOOKING_COUPON_LACK(400, "TO002", "There are no booking coupons available"),
+    BOOKING_CANCEL_COUPON_LACK(400, "TO003", "There are no booking cancel coupons available"),
+
+    // Lecture
+    BOOKING_TIME_EXCEED(400, "LO001", "The booking time has been exceeded"),
+    BOOKING_CANCEL_TIME_EXCEED(400, "LO002", "The booking cancel time has been exceeded"),
+    BOOKING_ENTRY(400, "LO003", "The booking entry is exceeded"),
+    ALREADY_BOOK(400, "LO004", "You already booked this lecture"),
 
     // User
-    SAME_PASSWORD(400, "U001", "It's the same password before")
+    SAME_PASSWORD(400, "U001", "It's the same password before"),
+
+    // File
+    FILE_SIZE(400, "F001", "File size must be below 5MB"),
+    FILE_UPLOAD(400, "F002", "File upload error occurred."),
+
+    // Util
+    DATE_PARSE(400, "U001", "Date parsing error occurred.")
 
     ;
     private final String code;

@@ -1,9 +1,9 @@
 package com.yogurt.domain.ticket.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.domain.ticket.domain.UserTicket;
 import com.yogurt.domain.ticket.dto.admin.SaveUserTicketRequest;
 import com.yogurt.domain.ticket.service.admin.AdminUserTicketService;
+import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class AdminUserTicketApi {
 
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> deleteUserTicket(@PathVariable Long id) {
-        service.delete(id);
+        service.deleteById(id);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("회원 수강권이 삭제되었습니다."), HttpStatus.OK);
     }
 }

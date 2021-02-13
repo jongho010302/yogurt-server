@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.user.domain.Date;
+import com.yogurt.domain.base.model.Date;
 import com.yogurt.validation.annotation.DateValid;
 
 import javax.validation.ConstraintValidator;

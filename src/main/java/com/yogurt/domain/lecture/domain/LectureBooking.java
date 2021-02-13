@@ -1,9 +1,9 @@
 package com.yogurt.domain.lecture.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.yogurt.domain.base.entity.BaseEntity;
 import com.yogurt.domain.ticket.domain.UserTicket;
-import com.yogurt.base.util.DateUtils;
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.util.DateUtils;
 import lombok.*;
 
 import javax.persistence.Column;

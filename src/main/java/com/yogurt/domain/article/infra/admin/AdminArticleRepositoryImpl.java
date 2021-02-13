@@ -1,7 +1,6 @@
 package com.yogurt.domain.article.infra.admin;
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yogurt.domain.article.domain.Article;
@@ -25,10 +24,10 @@ public class AdminArticleRepositoryImpl extends QuerydslRepositorySupport implem
         this.queryFactory = queryFactory;
     }
 
-    public List<Article> getByFilter(Pageable pageable, Long studioId, Boolean isDeleted) {
+    public List<Article> getByFilter(Pageable pageable, Long studioId) {
         JPAQuery<Article> query = queryFactory
                 .selectFrom(article)
-                .where(article.studioId.eq(studioId), eqIsDeleted(isDeleted));
+                .where(article.studioId.eq(studioId));
 
         QueryResults<Article> result = query.offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetchResults();
@@ -38,13 +37,6 @@ public class AdminArticleRepositoryImpl extends QuerydslRepositorySupport implem
                 .collect(Collectors.toList());
 
         return articleList;
-    }
-
-    private BooleanExpression eqIsDeleted(Boolean isDeleted) {
-        if (isDeleted == null) {
-            return null;
-        }
-        return article.isDeleted.eq(isDeleted);
     }
 
 }

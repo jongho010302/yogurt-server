@@ -1,13 +1,12 @@
 package com.yogurt.domain.lecture.api.member;
 
 import com.yogurt.domain.auth.domain.AuthContext;
-import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.base.dto.Meta;
 import com.yogurt.domain.lecture.domain.LectureBooking;
 import com.yogurt.domain.lecture.domain.LectureItem;
 import com.yogurt.domain.lecture.dto.LectureBookingRequest;
-import com.yogurt.domain.lecture.service.admin.AdminLectureService;
 import com.yogurt.domain.lecture.service.member.MemberLectureService;
+import com.yogurt.global.common.response.ApiResponse;
+import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

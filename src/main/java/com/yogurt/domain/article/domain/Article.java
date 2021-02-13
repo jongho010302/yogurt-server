@@ -1,6 +1,6 @@
 package com.yogurt.domain.article.domain;
 
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.domain.base.entity.BaseEntity;
 import com.yogurt.domain.user.domain.User;
 import lombok.*;
 

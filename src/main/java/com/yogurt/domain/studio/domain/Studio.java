@@ -1,8 +1,8 @@
 package com.yogurt.domain.studio.domain;
 
-import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.generic.user.domain.Date;
-import com.yogurt.generic.user.domain.TelNo;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.base.model.Date;
+import com.yogurt.domain.base.model.TelNo;
 import lombok.*;
 
 import javax.persistence.AttributeOverride;

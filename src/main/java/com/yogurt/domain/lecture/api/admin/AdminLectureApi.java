@@ -1,9 +1,9 @@
 package com.yogurt.domain.lecture.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.domain.lecture.domain.Lecture;
 import com.yogurt.domain.lecture.dto.SaveLecturesRequest;
 import com.yogurt.domain.lecture.service.admin.AdminLectureService;
+import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

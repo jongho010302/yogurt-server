@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.lesson.domain.ClassType;
+import com.yogurt.domain.base.model.ClassType;
 import com.yogurt.validation.annotation.ClassTypeValid;
 
 import javax.validation.ConstraintValidator;

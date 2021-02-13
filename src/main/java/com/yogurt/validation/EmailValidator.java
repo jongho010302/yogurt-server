@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.user.domain.Email;
+import com.yogurt.domain.base.model.Email;
 import com.yogurt.validation.annotation.EmailValid;
 
 import javax.validation.ConstraintValidator;

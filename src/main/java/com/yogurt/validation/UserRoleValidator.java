@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.user.domain.UserRole;
+import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.validation.annotation.UserRoleValid;
 
 import javax.validation.ConstraintValidator;

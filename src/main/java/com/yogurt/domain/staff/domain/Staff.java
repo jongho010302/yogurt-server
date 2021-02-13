@@ -1,7 +1,7 @@
 package com.yogurt.domain.staff.domain;
 
-import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.generic.user.domain.Date;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.base.model.Date;
 import com.yogurt.domain.user.domain.User;
 import lombok.*;
 

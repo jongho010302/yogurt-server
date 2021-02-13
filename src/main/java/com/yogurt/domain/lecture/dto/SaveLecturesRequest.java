@@ -1,6 +1,6 @@
 package com.yogurt.domain.lecture.dto;
 
-import com.yogurt.generic.lesson.domain.ClassType;
+import com.yogurt.domain.base.model.ClassType;
 import com.yogurt.domain.lecture.domain.Lecture;
 import com.yogurt.domain.lecture.domain.LectureItem;
 import com.yogurt.domain.staff.domain.Staff;

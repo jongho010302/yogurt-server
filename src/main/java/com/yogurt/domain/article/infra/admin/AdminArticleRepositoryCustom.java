@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AdminArticleRepositoryCustom {
 
-    List<Article> getByFilter(Pageable pageable, Long studioId, Boolean isDeleted);
+    List<Article> getByFilter(Pageable pageable, Long studioId);
 }

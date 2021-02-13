@@ -1,10 +1,10 @@
 package com.yogurt.domain.staff.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.base.dto.Meta;
 import com.yogurt.domain.staff.domain.Staff;
 import com.yogurt.domain.staff.dto.admin.request.SaveStaffRequest;
-import com.yogurt.domain.staff.service.AdminStaffService;
+import com.yogurt.domain.staff.service.admin.AdminStaffService;
+import com.yogurt.global.common.response.ApiResponse;
+import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,9 +22,8 @@ public class AdminStaffApi {
     private final AdminStaffService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(Pageable pageable,
-                                              @RequestParam(required = false) Boolean isDeleted) {
-        List<Staff> staffList = service.getAllWithFilter(pageable, isDeleted);
+    public ResponseEntity<ApiResponse> getAll(Pageable pageable) {
+        List<Staff> staffList = service.getAllWithFilter(pageable);
 
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프 리스트입니다.", staffList, Meta.of(pageable, staffList.size())), HttpStatus.OK);
     }
@@ -45,8 +44,7 @@ public class AdminStaffApi {
 
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
-        service.delete(id);
-
+        service.deleteById(id);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("스태프가 삭제되었습니다."), HttpStatus.OK);
     }
 

@@ -1,11 +1,10 @@
 package com.yogurt.domain.user.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.base.dto.Meta;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.dto.admin.ChangeRoleRequest;
 import com.yogurt.domain.user.service.admin.AdminUserService;
-import com.yogurt.domain.user.service.common.CommonUserService;
+import com.yogurt.global.common.response.ApiResponse;
+import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,9 +22,8 @@ public class AdminUserApi {
     private final AdminUserService service;
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAll(Pageable pageable,
-                                              @RequestParam(required = false) Boolean isDeleted) {
-        List<User> userList = service.getAllWithFilter(pageable, isDeleted);
+    public ResponseEntity<ApiResponse> getAll(Pageable pageable) {
+        List<User> userList = service.getAllWithFilter(pageable);
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("유저 리스트입니다.", userList, Meta.of(pageable, userList.size())), HttpStatus.OK);
     }
 

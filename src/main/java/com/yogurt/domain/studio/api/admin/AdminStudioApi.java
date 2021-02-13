@@ -1,9 +1,9 @@
 package com.yogurt.domain.studio.api.admin;
 
-import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.studio.dto.SaveStudioRequest;
 import com.yogurt.domain.studio.service.admin.AdminStudioService;
+import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

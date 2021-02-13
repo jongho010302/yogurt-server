@@ -1,8 +1,8 @@
 package com.yogurt.domain.lecture.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.generic.lesson.domain.ClassType;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.base.model.ClassType;
 import lombok.*;
 
 import javax.persistence.CascadeType;

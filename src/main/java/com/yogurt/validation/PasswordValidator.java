@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.user.domain.Password;
+import com.yogurt.domain.base.model.Password;
 import com.yogurt.validation.annotation.PasswordValid;
 
 import javax.validation.ConstraintValidator;

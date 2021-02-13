@@ -3,13 +3,12 @@ package com.yogurt.domain.auth.service;
 import com.yogurt.domain.auth.domain.Verification;
 import com.yogurt.domain.auth.exception.*;
 import com.yogurt.domain.auth.infra.VerificationRepository;
-import com.yogurt.domain.user.infra.UserRepository;
-import com.yogurt.base.exception.*;
-import com.yogurt.base.util.DateUtils;
-import com.yogurt.base.util.StringUtils;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.VerificationType;
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.VerificationType;
 import com.yogurt.domain.mail.service.MailService;
+import com.yogurt.domain.user.service.common.CommonUserService;
+import com.yogurt.util.DateUtils;
+import com.yogurt.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +21,11 @@ import java.util.Map;
 @Service
 public class VerificationServiceImpl implements VerificationService {
 
-    private final UserRepository userRepository;
-
     private final VerificationRepository repository;
 
     private final MailService mailService;
+
+    private final CommonUserService commonUserService;
 
     /**
      * 회원가입: 코드 전송
@@ -158,7 +157,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     private boolean existsUserByEmail(String email) {
-        return userRepository.existsByEmail(Email.of(email));
+        return commonUserService.existsByEmail(email);
     }
 
     private String getRandomCode() {

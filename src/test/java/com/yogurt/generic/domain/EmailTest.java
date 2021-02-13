@@ -2,7 +2,7 @@ package com.yogurt.generic.domain;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.yogurt.generic.user.domain.Email;
+import com.yogurt.domain.base.model.Email;
 import org.junit.jupiter.api.Test;
 
 public class EmailTest {

@@ -1,9 +1,9 @@
 package com.yogurt.domain.auth.dto.oauth;
 
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.user.domain.AuthType;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 

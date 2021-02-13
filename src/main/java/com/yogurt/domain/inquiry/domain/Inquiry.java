@@ -1,6 +1,6 @@
 package com.yogurt.domain.inquiry.domain;
 
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.domain.base.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;

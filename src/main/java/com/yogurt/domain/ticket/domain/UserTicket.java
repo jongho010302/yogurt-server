@@ -1,13 +1,12 @@
 package com.yogurt.domain.ticket.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.yogurt.base.exception.YogurtInvalidParamException;
-import com.yogurt.base.exception.YogurtLackOfCouponCountException;
-import com.yogurt.base.exception.YogurtTicketExpiredException;
-import com.yogurt.base.util.DateUtils;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.ticket.exception.BookingCancelCouponLackException;
+import com.yogurt.domain.ticket.exception.BookingCouponLackException;
 import com.yogurt.domain.ticket.exception.TicketExpireException;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.util.DateUtils;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -63,9 +62,10 @@ public class UserTicket extends BaseEntity {
         }
     }
 
+    // TODO
     public void validateUserOwner(long userId) {
         if (!this.isUserOwner(userId)) {
-            throw new YogurtInvalidParamException("자신의 수강권이 아닙니다.");
+//            throw new YogurtInvalidParamException("자신의 수강권이 아닙니다.");
         }
     }
 
@@ -75,7 +75,7 @@ public class UserTicket extends BaseEntity {
 
     public void validateRemainingCoupon() {
         if (!this.hasRemainingCoupon()) {
-            throw new YogurtLackOfCouponCountException("예약 가능 횟수를 넘어섰습니다. 다른 수강권을 이용해주세요.");
+            throw new BookingCouponLackException();
         }
     }
 
@@ -85,7 +85,7 @@ public class UserTicket extends BaseEntity {
 
     public void validateRemainingCancel() {
         if (!this.hasRemainingCancel()) {
-            throw new YogurtLackOfCouponCountException("예약 취소 가능 횟수를 넘어섰습니다. 다른 수강권을 이용해주세요.");
+            throw new BookingCancelCouponLackException();
         }
     }
 

@@ -1,10 +1,10 @@
 package com.yogurt.domain.lecture.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.yogurt.base.exception.YogurtBookingCancelTimeExceedException;
-import com.yogurt.base.exception.YogurtBookingTimeExceedException;
-import com.yogurt.base.util.DateUtils;
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.lecture.exception.BookingCancelTimeExceedException;
+import com.yogurt.domain.lecture.exception.BookingTimeExceedException;
+import com.yogurt.util.DateUtils;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -68,7 +68,7 @@ public class LectureItem extends BaseEntity {
 
     public void validateExceedLectureBookingTime() {
         if (this.isExceedLectureBookingTime()) {
-            throw new YogurtBookingTimeExceedException("예약 가능 시간을 넘어섰습니다. 다음에 이용해주세요.");
+            throw new BookingTimeExceedException();
         }
     }
 
@@ -80,7 +80,7 @@ public class LectureItem extends BaseEntity {
 
     public void validateExceedLectureCancelTime() {
         if (this.isExceedLectureCancelTime()) {
-            throw new YogurtBookingCancelTimeExceedException("예약 취소 가능 시간을 넘어섰습니다. 다음에 이용해주세요.");
+            throw new BookingCancelTimeExceedException();
         }
     }
 

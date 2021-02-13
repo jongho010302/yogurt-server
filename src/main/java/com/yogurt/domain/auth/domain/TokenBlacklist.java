@@ -1,6 +1,6 @@
 package com.yogurt.domain.auth.domain;
 
-import com.yogurt.generic.base.BaseEntity;
+import com.yogurt.domain.base.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;

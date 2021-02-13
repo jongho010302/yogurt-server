@@ -5,8 +5,8 @@ import com.yogurt.domain.article.dto.admin.response.SaveArticleRequest;
 import com.yogurt.domain.article.dto.admin.response.UpdateArticleRequest;
 import com.yogurt.domain.article.service.admin.AdminArticleService;
 import com.yogurt.domain.auth.domain.AuthContext;
-import com.yogurt.base.dto.ApiResponse;
-import com.yogurt.base.dto.Meta;
+import com.yogurt.global.common.response.ApiResponse;
+import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,9 +26,8 @@ public class AdminArticleApi {
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal AuthContext authContext,
-                                              Pageable pageable,
-                                              @RequestParam(required = false) Boolean isDeleted) {
-        List<Article> articleList = service.getByFilter(pageable, authContext.getStudioId(), isDeleted);
+                                              Pageable pageable) {
+        List<Article> articleList = service.getByFilter(pageable, authContext.getStudioId());
         return new ResponseEntity<>(ApiResponse.createSuccessApiResponse("게시글 리스트입니다.", articleList, Meta.of(pageable, articleList.size())), HttpStatus.OK);
     }
 

@@ -1,6 +1,6 @@
 package com.yogurt.validation;
 
-import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.domain.base.model.Phone;
 import com.yogurt.validation.annotation.PhoneValid;
 
 import javax.validation.ConstraintValidator;

@@ -1,7 +1,7 @@
 package com.yogurt.domain.studio.dto;
 
-import com.yogurt.generic.user.domain.Date;
-import com.yogurt.generic.user.domain.TelNo;
+import com.yogurt.domain.base.model.Date;
+import com.yogurt.domain.base.model.TelNo;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.validation.annotation.DateValid;
 import com.yogurt.validation.annotation.TelNoValid;

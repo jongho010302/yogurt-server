@@ -1,21 +1,21 @@
 package com.yogurt.domain.auth.service;
 
 import com.yogurt.domain.auth.domain.TokenBlacklist;
+import com.yogurt.domain.auth.dto.oauth.FacebookOAuthResponse;
+import com.yogurt.domain.auth.dto.oauth.GoogleOAuthResponse;
 import com.yogurt.domain.auth.dto.request.*;
 import com.yogurt.domain.auth.exception.EmailAlreadyRegisteredException;
 import com.yogurt.domain.auth.exception.WrongPasswordException;
 import com.yogurt.domain.auth.infra.TokenBlacklistRepository;
-import com.yogurt.domain.auth.dto.oauth.FacebookOAuthResponse;
-import com.yogurt.domain.auth.dto.oauth.GoogleOAuthResponse;
+import com.yogurt.domain.base.model.VerificationType;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.studio.service.admin.AdminStudioService;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.infra.UserRepository;
+import com.yogurt.domain.user.infra.admin.AdminUserRepository;
 import com.yogurt.domain.user.service.base.BaseUserService;
 import com.yogurt.domain.user.service.common.CommonUserService;
-import com.yogurt.base.crypto.CryptoService;
-import com.yogurt.base.security.JwtTokenProvider;
-import com.yogurt.generic.user.domain.VerificationType;
+import com.yogurt.global.crypto.CryptoService;
+import com.yogurt.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
 
-    private final UserRepository userRepository;
+    private final AdminUserRepository userRepository;
 
     private final OAuthService oauthService;
 

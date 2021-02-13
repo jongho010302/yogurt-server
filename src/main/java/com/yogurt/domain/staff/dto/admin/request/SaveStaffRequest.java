@@ -1,13 +1,13 @@
 package com.yogurt.domain.staff.dto.admin.request;
 
-import com.yogurt.domain.user.domain.AuthType;
-import com.yogurt.generic.user.domain.Date;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Phone;
+import com.yogurt.domain.base.model.Date;
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.Phone;
+import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.staff.domain.Staff;
 import com.yogurt.domain.staff.domain.StaffSchedule;
+import com.yogurt.domain.user.domain.AuthType;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.generic.user.domain.UserRole;
 import com.yogurt.validation.annotation.*;
 import lombok.Getter;
 import lombok.Setter;

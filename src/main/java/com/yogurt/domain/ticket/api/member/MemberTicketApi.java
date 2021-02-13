@@ -1,9 +1,9 @@
 package com.yogurt.domain.ticket.api.member;
 
 import com.yogurt.domain.auth.domain.AuthContext;
-import com.yogurt.base.dto.ApiResponse;
 import com.yogurt.domain.ticket.domain.UserTicket;
-import com.yogurt.domain.ticket.service.admin.AdminUserTicketService;
+import com.yogurt.domain.ticket.service.member.MemberUserTicketService;
+import com.yogurt.global.common.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/member/tickets")
 public class MemberTicketApi {
 
-    private final AdminUserTicketService service;
+    private final MemberUserTicketService service;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(@AuthenticationPrincipal AuthContext authContext) {

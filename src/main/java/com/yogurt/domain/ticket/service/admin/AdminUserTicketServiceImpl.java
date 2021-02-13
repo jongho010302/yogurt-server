@@ -1,6 +1,5 @@
 package com.yogurt.domain.ticket.service.admin;
 
-import com.yogurt.base.util.DateUtils;
 import com.yogurt.domain.ticket.domain.Ticket;
 import com.yogurt.domain.ticket.domain.UserTicket;
 import com.yogurt.domain.ticket.dto.admin.SaveUserTicketRequest;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,12 +42,6 @@ public class AdminUserTicketServiceImpl implements AdminUserTicketService {
     @Transactional
     public boolean existsById(Long id) {
         return commonUserTicketService.existsById(id);
-    }
-
-    @Transactional
-    public List<UserTicket> getAllByUser(User user) {
-        Date currentDate = DateUtils.getCurrentDate();
-        return repository.findByUserAndEndDateGreaterThanEqual(user, currentDate);
     }
 
     @Transactional

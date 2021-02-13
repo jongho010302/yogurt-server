@@ -1,6 +1,6 @@
 package com.yogurt.domain.ticket.dto.admin;
 
-import com.yogurt.generic.lesson.domain.ClassType;
+import com.yogurt.domain.base.model.ClassType;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.ticket.domain.Ticket;
 import com.yogurt.validation.annotation.ClassTypeValid;

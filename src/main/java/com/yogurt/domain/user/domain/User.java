@@ -2,11 +2,10 @@ package com.yogurt.domain.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yogurt.base.exception.YogurtNoAuthException;
-import com.yogurt.generic.base.BaseEntity;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Phone;
-import com.yogurt.generic.user.domain.UserRole;
+import com.yogurt.domain.base.entity.BaseEntity;
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.Phone;
+import com.yogurt.domain.base.model.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
@@ -74,11 +73,5 @@ public class User extends BaseEntity {
             displayRole = "UNKNOWN ROLE";
         }
         return displayRole;
-    }
-
-    public void validateDeletion() {
-        if (this.getIsDeleted()) {
-            throw new YogurtNoAuthException("탈퇴된 회원입니다.");
-        }
     }
 }

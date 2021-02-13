@@ -1,10 +1,10 @@
 package com.yogurt.domain.auth.dto.request;
 
+import com.yogurt.domain.base.model.Email;
+import com.yogurt.domain.base.model.Phone;
+import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.user.domain.AuthType;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.generic.user.domain.Email;
-import com.yogurt.generic.user.domain.Phone;
-import com.yogurt.generic.user.domain.UserRole;
 import com.yogurt.validation.annotation.EmailValid;
 import com.yogurt.validation.annotation.PasswordValid;
 import com.yogurt.validation.annotation.PhoneValid;
