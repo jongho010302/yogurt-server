@@ -5,7 +5,7 @@ import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.studio.infra.StudioRepository;
 import com.yogurt.domain.user.domain.AuthType;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.infra.common.CommonUserRepository;
+import com.yogurt.domain.user.infra.common.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 public class YogurtApplication {
 
-    private final CommonUserRepository commonUserRepository;
+    private final UserRepo userRepo;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +43,7 @@ public class YogurtApplication {
             log.info("Yogurt: Studio was created.");
         }
 
-        if (!commonUserRepository.findByEmail(Email.of("jongho.dev@gmail.com")).isPresent()) {
+        if (!userRepo.findByEmail(Email.of("jongho.dev@gmail.com")).isPresent()) {
             User user = User.builder()
                     .email(Email.of("jongho.dev@gmail.com"))
                     .password(passwordEncoder.encode("Wldms0302!"))
@@ -52,7 +52,7 @@ public class YogurtApplication {
                     .authType(AuthType.Email)
                     .phone(Phone.of("010-7570-3529"))
                     .build();
-            commonUserRepository.save(user);
+            userRepo.save(user);
             log.info("Yogurt: User was created.");
         }
 

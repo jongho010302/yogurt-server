@@ -1,4 +1,4 @@
-package com.yogurt.domain.lecture.dto;
+package com.yogurt.domain.lecture.dto.member;
 
 import com.yogurt.validation.annotation.LectureItemValid;
 import com.yogurt.validation.annotation.UserTicketValid;

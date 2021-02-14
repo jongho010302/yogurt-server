@@ -2,13 +2,16 @@ package com.yogurt.domain.lecture.service.admin;
 
 import com.yogurt.domain.lecture.domain.Lecture;
 import com.yogurt.domain.lecture.domain.LectureItem;
-import com.yogurt.domain.lecture.dto.LectureSchedule;
-import com.yogurt.domain.lecture.dto.SaveLecturesRequest;
-import com.yogurt.domain.lecture.infra.admin.AdminLectureRepository;
+import com.yogurt.domain.lecture.dto.admin.LectureSchedule;
+import com.yogurt.domain.lecture.dto.admin.LecturesResponse;
+import com.yogurt.domain.lecture.dto.admin.SaveLecturesRequest;
+import com.yogurt.domain.lecture.infra.admin.ALectureItemRepo;
+import com.yogurt.domain.lecture.infra.admin.ALectureRepo;
 import com.yogurt.domain.staff.domain.Staff;
-import com.yogurt.domain.staff.service.admin.AdminStaffService;
+import com.yogurt.domain.staff.service.admin.StaffService;
 import com.yogurt.util.DateUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,14 +24,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminLectureServiceImpl implements AdminLectureService {
 
-    private final AdminStaffService adminStaffService;
+    private final StaffService staffService;
 
-    private final AdminLectureRepository adminLectureRepository;
+    private final ALectureRepo ALectureRepo;
+
+    private final ALectureItemRepo lectureItemRepo;
+
+    @Transactional
+    public List<LecturesResponse> getAllWithFilter(Long studioId, Pageable pageable, String startAt, String endAt, String weekDay, Long staffId, String classType) {
+        return lectureItemRepo.getAllWithFilter(pageable, studioId, startAt, endAt, weekDay, staffId, classType);
+    }
 
     @Transactional
     public Lecture create(SaveLecturesRequest saveLecturesRequest) {
         Lecture lecture = saveLecturesRequest.toLectureEntity();
-        Staff staff = adminStaffService.getById(saveLecturesRequest.getStaffId());
+        Staff staff = staffService.getById(saveLecturesRequest.getStaffId());
 
         String bookingEndTime = saveLecturesRequest.getBookingEndTime();
         String bookingCancelEndTime = saveLecturesRequest.getBookingCancelEndTime();
@@ -93,7 +103,7 @@ public class AdminLectureServiceImpl implements AdminLectureService {
             currentDate = currentCalendar.getTime();
         }
 
-        Lecture savedLecture = adminLectureRepository.save(lecture);
+        Lecture savedLecture = ALectureRepo.save(lecture);
         return savedLecture;
     }
 

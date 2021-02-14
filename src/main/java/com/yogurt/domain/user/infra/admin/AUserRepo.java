@@ -4,5 +4,5 @@ import com.yogurt.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface AdminUserRepository extends JpaRepository<User, Long>, AdminUserRepositoryCustom {
+public interface AUserRepo extends JpaRepository<User, Long>, AUserRepoCustom {
 }

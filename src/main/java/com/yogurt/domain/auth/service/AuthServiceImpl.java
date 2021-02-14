@@ -11,7 +11,7 @@ import com.yogurt.domain.base.model.VerificationType;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.studio.service.admin.AdminStudioService;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.infra.admin.AdminUserRepository;
+import com.yogurt.domain.user.infra.admin.AUserRepo;
 import com.yogurt.domain.user.service.base.BaseUserService;
 import com.yogurt.domain.user.service.common.CommonUserService;
 import com.yogurt.global.crypto.CryptoService;
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
 
-    private final AdminUserRepository userRepository;
+    private final AUserRepo userRepository;
 
     private final OAuthService oauthService;
 

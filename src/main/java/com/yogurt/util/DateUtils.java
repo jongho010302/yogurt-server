@@ -10,6 +10,8 @@ public class DateUtils {
 
     static final String DATE_PATTERN_DEFAULT = "yyyy-MM-dd";
 
+    static final String[] WEEK = {"일", "월", "화", "수", "목", "금", "토"};
+
     public static Date parse(String date) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN_DEFAULT);
@@ -61,5 +63,25 @@ public class DateUtils {
 
     public static Date getCurrentDate() {
         return new Date();
+    }
+
+    public static String getDayOfWeek(String strDate) {
+        Date date = DateUtils.parse(strDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int dayOfWeekNum = calendar.get(Calendar.DAY_OF_WEEK);
+        String dayOfWeek = WEEK[dayOfWeekNum];
+        return dayOfWeek;
+    }
+
+    public static String getLectureAt(String startAt, String endAt) {
+        String dayOfWeek = getDayOfWeek(startAt);
+        String yyyymmmdd = startAt.split(" ")[0];
+        String startTime = endAt.split(" ")[1];
+        String endTime = endAt.split(" ")[1];
+
+        String lectureAt = String.format("%s (%s) %s~%s", yyyymmmdd, dayOfWeek, startTime, endTime);
+        return lectureAt;
     }
 }

@@ -6,8 +6,8 @@ import com.yogurt.domain.lecture.exception.AlreadyBookException;
 import com.yogurt.domain.lecture.exception.BookingEntryExceedException;
 import com.yogurt.domain.lecture.exception.LectureBookingNotFoundException;
 import com.yogurt.domain.lecture.exception.LectureItemNotFoundException;
-import com.yogurt.domain.lecture.infra.member.MemberLectureBookingRepository;
-import com.yogurt.domain.lecture.infra.member.MemberLectureItemRepository;
+import com.yogurt.domain.lecture.infra.member.MLectureBookingRepo;
+import com.yogurt.domain.lecture.infra.member.MLectureItemRepo;
 import com.yogurt.domain.ticket.domain.UserTicket;
 import com.yogurt.domain.ticket.service.member.MemberUserTicketService;
 import com.yogurt.domain.user.domain.User;
@@ -24,9 +24,9 @@ public class MemberLectureServiceImpl implements MemberLectureService {
 
     private final MemberUserTicketService userTicketService;
 
-    private final MemberLectureItemRepository memberLectureItemRepository;
+    private final MLectureItemRepo memberLectureItemRepository;
 
-    private final MemberLectureBookingRepository memberLectureBookingRepository;
+    private final MLectureBookingRepo MLectureBookingRepo;
 
     @Transactional
     public List<LectureItem> getAllWithFilter(Long studioId, Pageable pageable, String startAt, String endAt, String weekDay, Long staffId, String classType) {
@@ -36,7 +36,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
     @Transactional
     public List<LectureBooking> getBookingList(User user, Long userTicketId) {
         List<UserTicket> userTickets = userTicketService.getAllByUser(user);
-        List<LectureBooking> lectureBookings = memberLectureBookingRepository.findByUserTicketInAndIsCanceled(userTickets, false);
+        List<LectureBooking> lectureBookings = MLectureBookingRepo.findByUserTicketInAndIsCanceled(userTickets, false);
         return lectureBookings;
     }
 
@@ -61,7 +61,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
                 .isCanceled(false)
                 .isAttended(false)
                 .build();
-        return memberLectureBookingRepository.save(lectureBooking);
+        return MLectureBookingRepo.save(lectureBooking);
     }
 
     private LectureItem getLectureItemById(Long id) {
@@ -69,7 +69,7 @@ public class MemberLectureServiceImpl implements MemberLectureService {
     }
 
     private void validateBooking(Long userId, LectureItem lectureItem) {
-        List<LectureBooking> lectureBookingList = memberLectureBookingRepository.findByLectureItem(lectureItem);
+        List<LectureBooking> lectureBookingList = MLectureBookingRepo.findByLectureItem(lectureItem);
         this.validateUserAlreadyBooked(userId, lectureBookingList);
         this.validateBookingEntry(lectureItem, lectureBookingList);
     }
@@ -112,10 +112,10 @@ public class MemberLectureServiceImpl implements MemberLectureService {
         userTicketService.create(userTicket);
 
         lectureBooking.canceled();
-        return memberLectureBookingRepository.save(lectureBooking);
+        return MLectureBookingRepo.save(lectureBooking);
     }
 
     private LectureBooking getLectureBookingById(Long id) {
-        return memberLectureBookingRepository.findById(id).orElseThrow(() -> new LectureBookingNotFoundException(id));
+        return MLectureBookingRepo.findById(id).orElseThrow(() -> new LectureBookingNotFoundException(id));
     }
 }

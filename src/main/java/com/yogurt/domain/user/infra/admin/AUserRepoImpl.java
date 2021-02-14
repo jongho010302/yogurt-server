@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 import static com.yogurt.domain.user.domain.QUser.user;
 
 @Repository
-public class AdminUserRepositoryImpl extends QuerydslRepositorySupport implements AdminUserRepositoryCustom {
+public class AUserRepoImpl extends QuerydslRepositorySupport implements AUserRepoCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public AdminUserRepositoryImpl(JPAQueryFactory queryFactory) {
+    public AUserRepoImpl(JPAQueryFactory queryFactory) {
         super(LectureItem.class);
         this.queryFactory = queryFactory;
     }

@@ -2,7 +2,7 @@ package com.yogurt.domain.staff.api.admin;
 
 import com.yogurt.domain.staff.domain.Staff;
 import com.yogurt.domain.staff.dto.admin.request.SaveStaffRequest;
-import com.yogurt.domain.staff.service.admin.AdminStaffService;
+import com.yogurt.domain.staff.service.admin.StaffService;
 import com.yogurt.global.common.response.ApiResponse;
 import com.yogurt.global.common.response.Meta;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/admin/staffs")
 public class AdminStaffApi {
 
-    private final AdminStaffService service;
+    private final StaffService service;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAll(Pageable pageable) {

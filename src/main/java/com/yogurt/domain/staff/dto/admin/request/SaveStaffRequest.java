@@ -80,6 +80,7 @@ public class SaveStaffRequest {
         return Staff.builder()
                 .user(user)
                 .selfIntroduce(selfIntroduce)
+                .name(name)
                 .hiredAt(Date.of(hiredAt))
                 .schedules(staffScheduleList)
                 .build();

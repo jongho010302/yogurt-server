@@ -27,6 +27,9 @@ public class Staff extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String selfIntroduce;
 
+    @Column
+    private String name;
+
     @AttributeOverrides({
             @AttributeOverride( name = "date", column = @Column(name = "hired_at", nullable = false, length = 10)),
     })

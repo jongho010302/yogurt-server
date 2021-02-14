@@ -3,7 +3,7 @@ package com.yogurt.domain.lecture.api.member;
 import com.yogurt.domain.auth.domain.AuthContext;
 import com.yogurt.domain.lecture.domain.LectureBooking;
 import com.yogurt.domain.lecture.domain.LectureItem;
-import com.yogurt.domain.lecture.dto.LectureBookingRequest;
+import com.yogurt.domain.lecture.dto.member.LectureBookingRequest;
 import com.yogurt.domain.lecture.service.member.MemberLectureService;
 import com.yogurt.global.common.response.ApiResponse;
 import com.yogurt.global.common.response.Meta;

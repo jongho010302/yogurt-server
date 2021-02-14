@@ -2,13 +2,11 @@ package com.yogurt.domain.user.service.admin;
 
 import com.yogurt.domain.base.model.UserRole;
 import com.yogurt.domain.ticket.domain.UserTicket;
-import com.yogurt.domain.ticket.service.admin.AdminTicketService;
 import com.yogurt.domain.ticket.service.admin.AdminUserTicketService;
 import com.yogurt.domain.ticket.service.common.CommonTicketService;
-import com.yogurt.domain.ticket.service.common.CommonUserTicketService;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.dto.admin.response.UsersResponse;
-import com.yogurt.domain.user.infra.admin.AdminUserRepository;
+import com.yogurt.domain.user.infra.admin.AUserRepo;
 import com.yogurt.domain.user.service.common.CommonUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +21,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     private final CommonUserService commonUserService;
 
-    private final AdminUserRepository repository;
+    private final AUserRepo repository;
 
     private final CommonTicketService commonTicketService;
 

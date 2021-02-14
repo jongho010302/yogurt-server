@@ -22,7 +22,7 @@ public enum ErrorCode {
     OAUTH(400, "A006", "OAuth error occurred"),
 
     // Ticket
-    TICKET_EXPIRE(400, "TO01", "Ticket was already expired"),
+    TICKET_EXPIRE(400, "TO01", "Ticket was expired"),
     BOOKING_COUPON_LACK(400, "TO002", "There are no booking coupons available"),
     BOOKING_CANCEL_COUPON_LACK(400, "TO003", "There are no booking cancel coupons available"),
 

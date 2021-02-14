@@ -13,7 +13,7 @@ import com.yogurt.domain.user.dto.common.request.ChangeEmailRequest;
 import com.yogurt.domain.user.dto.common.response.CheckResponse;
 import com.yogurt.domain.user.exception.SameEmailException;
 import com.yogurt.domain.user.exception.SamePasswordException;
-import com.yogurt.domain.user.infra.admin.AdminUserRepository;
+import com.yogurt.domain.user.infra.admin.AUserRepo;
 import com.yogurt.domain.user.service.UserMailService;
 import com.yogurt.domain.user.service.common.CommonUserService;
 import com.yogurt.global.crypto.CryptoService;
@@ -37,7 +37,7 @@ public class BaseUserServiceImpl implements BaseUserService {
 
     private final S3Uploader s3Uploader;
 
-    private final AdminUserRepository repository;
+    private final AUserRepo repository;
 
     private final UserMailService mailService;
 

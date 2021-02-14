@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface MemberLectureBookingRepository extends JpaRepository<LectureBooking, Long> {
+public interface MLectureBookingRepo extends JpaRepository<LectureBooking, Long> {
 
     List<LectureBooking> findByUserTicketInAndIsCanceled(List<UserTicket> userTickets, Boolean isCancel);
 

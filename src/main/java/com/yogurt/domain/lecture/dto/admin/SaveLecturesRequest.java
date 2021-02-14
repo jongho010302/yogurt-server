@@ -1,4 +1,4 @@
-package com.yogurt.domain.lecture.dto;
+package com.yogurt.domain.lecture.dto.admin;
 
 import com.yogurt.domain.base.model.ClassType;
 import com.yogurt.domain.lecture.domain.Lecture;

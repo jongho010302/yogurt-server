@@ -1,4 +1,4 @@
-package com.yogurt.domain.lecture.dto;
+package com.yogurt.domain.lecture.dto.admin;
 
 import lombok.Getter;
 import lombok.Setter;

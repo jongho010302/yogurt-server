@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class AdminStaffServiceImpl implements AdminStaffService {
+public class StaffServiceImpl implements StaffService {
 
     private final BaseUserService baseUserService;
 

@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 import static com.yogurt.domain.lecture.domain.QLectureItem.lectureItem;
 
 @Repository
-public class MemberLectureItemRepositoryImpl extends QuerydslRepositorySupport implements MemberLectureRepositoryCustom {
+public class MLectureItemRepoImpl extends QuerydslRepositorySupport implements MLectureItemRepoCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public MemberLectureItemRepositoryImpl(JPAQueryFactory queryFactory) {
+    public MLectureItemRepoImpl(JPAQueryFactory queryFactory) {
         super(LectureItem.class);
         this.queryFactory = queryFactory;
     }

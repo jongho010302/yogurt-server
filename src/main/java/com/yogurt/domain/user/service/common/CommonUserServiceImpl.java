@@ -4,7 +4,7 @@ import com.yogurt.domain.base.model.Email;
 import com.yogurt.domain.user.domain.User;
 import com.yogurt.domain.user.exception.UserEmailNotFoundException;
 import com.yogurt.domain.user.exception.UserNotFoundException;
-import com.yogurt.domain.user.infra.common.CommonUserRepository;
+import com.yogurt.domain.user.infra.common.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class CommonUserServiceImpl implements CommonUserService {
 
-    private final CommonUserRepository repository;
+    private final UserRepo repository;
 
     @Transactional
     public User getById(Long id) {

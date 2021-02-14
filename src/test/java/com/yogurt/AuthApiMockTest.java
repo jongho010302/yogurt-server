@@ -10,7 +10,7 @@ import com.yogurt.domain.auth.dto.request.LoginResponse;
 import com.yogurt.domain.auth.service.AuthService;
 import com.yogurt.domain.studio.domain.Studio;
 import com.yogurt.domain.user.domain.User;
-import com.yogurt.domain.user.infra.admin.AdminUserRepository;
+import com.yogurt.domain.user.infra.admin.AUserRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +27,7 @@ public class AuthApiMockTest {
     private AuthService service;
 
     @MockBean
-    private AdminUserRepository repository;
+    private AUserRepo repository;
 
     @Test
     public void loginWithEmail() {
