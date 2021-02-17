@@ -32,10 +32,6 @@ public class SaveStaffRequest {
     @NotEmpty(message = "이름은 필수 값입니다.")
     private String name;
 
-    @DateValid(message = "생일의 형식을 맞춰 주세요.")
-    @NotEmpty(message = "생일은 필수 값입니다.")
-    private String birthday;
-
     @PhoneValid
     @NotEmpty(message = "핸드폰 번호는 필수 값입니다.")
     private String phone;
