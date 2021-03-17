@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (!jwtTokenProvider.validateToken(token)) {
-            ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("유효하지 않은 인증 토큰입니다.");
+            ApiResponse apiResponse = ApiResponse.createApiResponse(false, "유효하지 않은 인증 토큰입니다.");
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Optional<TokenBlacklist> tokenBlacklist = tokenBlacklistRepository.findByToken(token);
 
         if (tokenBlacklist.isPresent()) {
-            ApiResponse apiResponse = ApiResponse.createSuccessApiResponse("로그아웃된 유저의 인증 토큰입니다.");
+            ApiResponse apiResponse = ApiResponse.createApiResponse(false, "로그아웃된 유저의 인증 토큰입니다.");
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
